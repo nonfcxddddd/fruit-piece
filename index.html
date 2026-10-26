@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fruit Piece</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Fruit Piece: an anime pirate adventure on Roblox. Eat a magic fruit, pick a side and sail for the biggest bounty on the sea.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Rubik:wght@400;500;700&family=Kanit:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap">
+<style>
+/* Layout: a voyage down the page - key art, trailer, fruits, the island route in sailing order, life at sea, the cast,
+   real screenshots, then the partner brief (what is built, what comes next, how it earns). One dark sea at night. */
+:root {
+  --night: #0B1220;      /* deep night sea */
+  --hull: #131D33;       /* raised panels */
+  --deck: #182540;       /* panels on panels */
+  --rope: #24314F;       /* hairlines, borders */
+  --ink: #EEF2FA;        /* text */
+  --mist: #A3B0C9;       /* secondary text */
+  --gold: #FFBA4A;       /* game UI gold */
+  --gold-hi: #FFD569;
+  --ember: #F0662E;      /* flame accent */
+  --sea: #4FB3FF;        /* navy / sea accent */
+  --tar: #1A0D05;        /* logo outline */
+  --display: "Lilita One", "Kanit", "Arial Black", "Segoe UI Black", sans-serif;
+  --body: "Rubik", "IBM Plex Sans Thai", "Segoe UI", system-ui, sans-serif;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
+  --step-3: clamp(2.2rem, 1.5rem + 3vw, 3.6rem);
+  --radius: 14px;
+  --wide: 1180px;
+  --nav-h: 60px;
+  color-scheme: dark;
+}
+:root[data-lang="th"] {
+  --display: "Kanit", "Lilita One", "Arial Black", sans-serif;
+  --body: "IBM Plex Sans Thai", "Rubik", "Segoe UI", system-ui, sans-serif;
+}
+/* one language at a time: Thai by default (set by the script below), English without script */
+:root[data-lang="th"] .en, :root:not([data-lang="th"]) .th { display: none !important; }
+* { box-sizing: border-box; }
+html { scroll-padding-top: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + 8px); }
+body { margin: 0; background: var(--night); color: var(--ink); font-family: var(--body); font-size: var(--step-0); line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--night); }
+img, video, canvas { max-width: 100%; height: auto; display: block; }
+a { color: var(--gold-hi); }
+:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.08; text-wrap: balance; margin: 0; letter-spacing: .01em; }
+:root[data-lang="th"] h2, :root[data-lang="th"] h3 { font-weight: 700; line-height: 1.25; letter-spacing: 0; }
+p { margin: 0; }
+
+.wrap { width: 100%; max-width: var(--wide); margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.band { padding-block: clamp(56px, 8vw, 104px); }
+.band + .band { border-top: 1px solid var(--rope); }
+.eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+:root[data-lang="th"] .eyebrow { letter-spacing: .04em; font-size: .88rem; }
+.lede { color: var(--mist); max-width: 62ch; font-size: 1.075rem; }
+.head { display: grid; gap: 12px; margin-bottom: clamp(28px, 4vw, 44px); }
+.head h2 { font-size: var(--step-3); }
+
+/* ---------- top bar ---------- */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(11,18,32,.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(36,49,79,.8); }
+.nav .wrap { display: flex; align-items: center; gap: 18px; min-height: var(--nav-h); }
+.nav .mark { font-size: 1.5rem; flex: none; text-decoration: none; }
+.nav .mark span + span { margin-left: .3em; }
+.links { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.links::-webkit-scrollbar { display: none; }
+.links a { flex: none; padding: 8px 12px; border-radius: 10px; color: var(--mist); text-decoration: none; font-weight: 500; font-size: .95rem; }
+.links a:hover { color: var(--ink); background: var(--hull); }
+.links a.partner { color: var(--gold-hi); }
+.lang { flex: none; display: inline-flex; border: 1px solid var(--rope); border-radius: 10px; overflow: hidden; }
+.lang button { appearance: none; border: 0; background: transparent; color: var(--mist); font: 700 .85rem var(--body); padding: 8px 11px; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--gold); color: var(--tar); }
+@media (max-width: 720px) { .links a:not(.partner) { display: none; } .links { margin-left: auto; } .links .long { display: none; } .links a { padding: 8px 8px; } }
+
+/* ---------- wordmark: gold letters on a thick dark outline, like the game logo ---------- */
+.mark { display: grid; font-family: "Lilita One", "Arial Black", sans-serif; line-height: .86; letter-spacing: .02em; }
+.mark span { position: relative; display: block; width: max-content; color: transparent; }
+.mark span::before, .mark span::after { content: attr(data-text); position: absolute; inset: 0; }
+.mark span::before { color: var(--tar); -webkit-text-stroke: .12em var(--tar); text-shadow: 0 .08em 0 var(--tar), 0 .14em .3em rgba(0,0,0,.45); }
+.mark span::after { background: linear-gradient(180deg, #FFF1C4 0%, var(--gold-hi) 32%, var(--gold) 58%, var(--ember) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mark span + span { margin-left: .42em; }
+.nav .mark { display: flex; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; overflow: hidden; }
+.hero-art { position: relative; }
+.hero-art img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.hero-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--night) 100%); }
+.embers { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.hero-copy { position: relative; z-index: 2; display: grid; gap: 22px; padding-block: 8px 48px; }
+.hero .mark { font-size: clamp(3.6rem, 2rem + 8vw, 8.4rem); }
+.tagline { font-size: clamp(1.1rem, 1rem + .6vw, 1.4rem); font-weight: 500; max-width: 32ch; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; list-style: none; }
+.stats li { display: flex; align-items: baseline; gap: 6px; padding: 7px 14px; border-radius: 999px; background: rgba(11,18,32,.72); border: 1px solid rgba(255,213,105,.35); font-size: .92rem; color: var(--mist); font-variant-numeric: tabular-nums; }
+.stats b { font-family: "Lilita One", "Kanit", sans-serif; font-weight: 400; font-size: 1.15rem; color: var(--gold-hi); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 22px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 1rem; }
+.btn-gold { background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: var(--tar); box-shadow: 0 4px 0 #B86E14; }
+.btn-gold:hover { filter: brightness(1.06); }
+.btn-ghost { color: var(--ink); border: 1px solid var(--rope); background: rgba(19,29,51,.7); }
+.btn-ghost:hover { border-color: var(--gold); }
+.soon { font-size: .9rem; color: var(--mist); }
+.soon b { color: var(--ink); }
+@media (min-width: 900px) {
+  .hero-art { position: absolute; inset: 0; }
+  .hero-art img { height: 100%; aspect-ratio: auto; animation: drift 26s ease-in-out infinite alternate; transform-origin: 70% 50%; }
+  .hero-art::after { background:
+      linear-gradient(180deg, rgba(11,18,32,0) 30%, rgba(11,18,32,.72) 60%, var(--night) 97%),
+      linear-gradient(90deg, rgba(11,18,32,.75) 0%, rgba(11,18,32,0) 50%); }
+  .hero-copy { min-height: clamp(560px, 50vw, 760px); align-content: end; padding-block: 72px 48px; }
+  .hero-copy > * { max-width: 620px; }
+  .hero .mark { font-size: clamp(4rem, 1.5rem + 6vw, 7rem); }
+}
+@keyframes drift { from { transform: scale(1); } to { transform: scale(1.06); } }
+.rise { animation: rise .9s cubic-bezier(.2,.8,.2,1) both; }
+.rise:nth-child(2) { animation-delay: .08s; } .rise:nth-child(3) { animation-delay: .16s; } .rise:nth-child(4) { animation-delay: .24s; } .rise:nth-child(5) { animation-delay: .32s; }
+@keyframes rise { from { transform: translateY(18px); } to { transform: none; } }
+.hero-copy .eyebrow, .hero-copy .tagline, .hero-copy .soon { text-shadow: 0 2px 10px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9); }
+
+/* ---------- trailer ---------- */
+.trailer { display: grid; gap: 28px; align-items: center; }
+.trailer video { width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); border: 1px solid var(--rope); background: #000; box-shadow: 0 30px 80px -30px rgba(240,102,46,.45); }
+@media (min-width: 900px) { .trailer { grid-template-columns: minmax(0, 1fr) minmax(0, 1.9fr); gap: 48px; } }
+
+/* ---------- fruits ---------- */
+.fruit-banner { position: relative; border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+.fruit-banner img { width: 100%; aspect-ratio: 21 / 8; object-fit: cover; object-position: 50% 42%; }
+.fruits { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+@media (min-width: 560px) { .fruits { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .fruits { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.fruit { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 14px; align-items: center; padding: 14px 16px; border-radius: var(--radius); background: var(--hull); border: 1px solid var(--rope); transition: transform .2s, border-color .2s; }
+.fruit:hover { transform: translateY(-3px); border-color: rgba(255,213,105,.45); }
+.fruit img { width: 76px; height: 76px; object-fit: contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
+.fruit h3 { font-size: 1.35rem; }
+.fruit p { color: var(--mist); font-size: .93rem; line-height: 1.45; }
+.fruit[data-el="flame"] h3 { color: #FF9A52; }
+.fruit[data-el="ice"] h3 { color: #8FD8FF; }
+.fruit[data-el="suke"] h3 { color: #C9E6FF; }
+.fruit[data-el="spin"] h3 { color: #8BE3B5; }
+.fruit[data-el="smoke"] h3 { color: #C7BEDD; }
+.fruit[data-el="bomb"] h3 { color: #FF7A4D; }
+.note { margin-top: 18px; color: var(--mist); font-size: .95rem; }
+.fruit.later { border-style: dashed; background: transparent; }
+.fruit.later img { opacity: .55; filter: grayscale(.4) drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
+.fruit .later-tag { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 2px; }
+
+/* ---------- island route (order = levelling order) ---------- */
+.route { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+@media (min-width: 640px) { .route { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .route { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.stop { display: grid; grid-template-rows: auto 1fr; border-radius: var(--radius); overflow: hidden; background: var(--hull); border: 1px solid var(--rope); }
+.stop figure { margin: 0; position: relative; overflow: hidden; }
+.stop figure img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; transition: transform .6s ease; }
+.stop:hover figure img { transform: scale(1.04); }
+.stop .tag { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; }
+.chip { padding: 4px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: rgba(11,18,32,.82); color: var(--ink); border: 1px solid rgba(255,255,255,.18); font-variant-numeric: tabular-nums; }
+.chip.lv { color: var(--tar); background: var(--gold-hi); border-color: transparent; }
+.stop .txt { display: grid; gap: 8px; align-content: start; padding: 16px 18px 20px; }
+.stop h3 { font-size: 1.5rem; }
+.stop p { color: var(--mist); font-size: .95rem; line-height: 1.5; }
+.stop .boss { font-size: .9rem; color: var(--ink); }
+.stop .boss b { color: var(--gold); font-weight: 700; }
+.stop.hidden-isle { border-color: rgba(255,213,105,.45); }
+
+/* ---------- life at sea ---------- */
+.rows { display: grid; gap: clamp(36px, 6vw, 72px); }
+.row { display: grid; gap: 22px; align-items: center; }
+.row img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--rope); }
+.row .shot { aspect-ratio: 16 / 9; }
+.row .txt { display: grid; gap: 12px; min-width: 0; }
+.row h3 { font-size: var(--step-2); }
+.row p { color: var(--mist); max-width: 52ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 4px 0 0; list-style: none; }
+.facts li { padding: 5px 12px; border-radius: 8px; background: var(--hull); border: 1px solid var(--rope); font-size: .88rem; color: var(--ink); }
+@media (min-width: 900px) {
+  .row { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; }
+  .row:nth-child(even) .pic { order: 2; }
+}
+
+/* ---------- the cast: in-game renders ---------- */
+.cast { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (min-width: 720px) { .cast { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.card { display: grid; grid-template-rows: auto 1fr; border-radius: var(--radius); overflow: hidden; background: var(--hull); border: 1px solid var(--rope); }
+.card figure { margin: 0; background: var(--hull); }
+.card figure img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+.card .txt { display: grid; gap: 4px; align-content: start; padding: 12px 14px 16px; }
+.card h3 { font-size: 1.25rem; }
+.card p { color: var(--mist); font-size: .88rem; line-height: 1.45; }
+.card .lvl { font-size: .8rem; font-weight: 700; color: var(--gold); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.card.next { border-color: rgba(240,102,46,.6); }
+.card.next .lvl { color: var(--ember); }
+
+/* ---------- gameplay shots ---------- */
+.shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (min-width: 900px) { .shots { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.shots figure { margin: 0; display: grid; gap: 8px; }
+.shots img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; border: 1px solid var(--rope); }
+.shots figcaption { font-size: .85rem; color: var(--mist); }
+
+/* ---------- partner brief ---------- */
+.partners { background: linear-gradient(180deg, var(--night), #0E1628 30%, var(--night)); }
+.built { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 0; margin: 0; list-style: none; }
+@media (min-width: 640px) { .built { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .built { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.built li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; padding: 14px 16px; border-radius: 12px; background: var(--hull); border: 1px solid var(--rope); }
+.built .tick { width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center; background: rgba(255,186,74,.14); color: var(--gold-hi); font-weight: 700; }
+.built b { display: block; color: var(--ink); font-weight: 700; }
+.built span.d { color: var(--mist); font-size: .9rem; line-height: 1.45; }
+.sub { font-family: var(--display); font-size: var(--step-2); margin: clamp(44px, 6vw, 72px) 0 18px; }
+.road { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0; margin: 0; list-style: none; counter-reset: leg; }
+@media (min-width: 900px) { .road { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.road li { position: relative; padding: 18px 18px 22px 52px; border-left: 2px dashed var(--rope); counter-increment: leg; display: grid; gap: 6px; }
+.road li::before { content: counter(leg); position: absolute; left: -17px; top: 16px; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--deck); border: 2px solid var(--gold); color: var(--gold-hi); font-family: "Lilita One", sans-serif; }
+.road li.done::before { content: "✓"; background: var(--gold); color: var(--tar); }
+@media (min-width: 900px) {
+  .road li { border-left: 0; border-top: 2px dashed var(--rope); padding: 34px 18px 0 0; }
+  .road li::before { left: 0; top: -17px; }
+}
+.road h4 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 1.3rem; }
+:root[data-lang="th"] .road h4 { font-weight: 700; }
+.road .when { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.road p { color: var(--mist); font-size: .93rem; line-height: 1.5; }
+.split { display: grid; gap: 18px; }
+@media (min-width: 900px) { .split { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.panel { border-radius: var(--radius); background: var(--hull); border: 1px solid var(--rope); padding: clamp(18px, 3vw, 28px); display: grid; gap: 14px; align-content: start; }
+.panel h3 { font-size: 1.6rem; }
+.panel ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.panel li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; color: var(--mist); }
+.panel li b { color: var(--ink); }
+.pill { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.ready { background: rgba(255,186,74,.16); color: var(--gold-hi); }
+.pill.plan { background: rgba(79,179,255,.14); color: var(--sea); }
+.pill.safe { background: rgba(139,227,181,.14); color: #8BE3B5; }
+
+/* ---------- footer ---------- */
+.cta { text-align: center; display: grid; gap: 18px; justify-items: center; }
+.cta .mark { font-size: clamp(3rem, 2rem + 5vw, 5.6rem); justify-items: center; }
+.cta p { color: var(--mist); max-width: 54ch; }
+footer { border-top: 1px solid var(--rope); padding-block: 36px 56px; }
+footer .wrap { display: grid; gap: 10px; }
+footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-art img, .rise { animation: none; }
+  .stop figure img, .fruit { transition: none; }
+  .embers { display: none; }
+}
+</style>
+</head>
+<body>
+<script>
+  // the language: Thai unless this viewer picked English before
+  (function () {
+    var lang = "th";
+    try { lang = localStorage.getItem("fp-lang") || "th"; } catch (e) {}
+    document.documentElement.setAttribute("data-lang", lang);
+    document.documentElement.setAttribute("lang", lang);
+  })();
+</script>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="Fruit Piece, back to top"><span data-text="FRUIT">FRUIT</span><span data-text="PIECE">PIECE</span></a>
+    <div class="links">
+      <a href="#trailer"><span class="th">เทรลเลอร์</span><span class="en">Trailer</span></a>
+      <a href="#fruits"><span class="th">ผลไม้วิเศษ</span><span class="en">Fruits</span></a>
+      <a href="#islands"><span class="th">เกาะ</span><span class="en">Islands</span></a>
+      <a href="#features"><span class="th">ฟีเจอร์</span><span class="en">Features</span></a>
+      <a href="#cast"><span class="th">บอส</span><span class="en">Bosses</span></a>
+      <a class="partner" href="#progression">Progression</a>
+    </div>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-th" data-set="th">ไทย</button>
+      <button type="button" id="lang-en" data-set="en">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-art">
+    <img src="img/game-hero.jpg" alt="In-game screenshot: a black-sailed galleon under a full moon by the navy fortress town, a fighter standing at the bow." width="1576" height="1080" fetchpriority="high">
+  </div>
+  <canvas class="embers" aria-hidden="true"></canvas>
+  <div class="wrap hero-copy">
+    <p class="eyebrow rise"><span class="th">เกมผจญภัยโจรสลัดสไตล์อนิเมะบน Roblox</span><span class="en">Anime pirate adventure on Roblox</span></p>
+    <h1 class="mark rise" aria-label="Fruit Piece"><span data-text="FRUIT">FRUIT</span><span data-text="PIECE">PIECE</span></h1>
+    <p class="tagline rise"><span class="th">กินผลไม้วิเศษ เลือกฝ่าย แล้วออกเรือไล่ล่าค่าหัวที่สูงที่สุดในทะเล</span><span class="en">Eat a magic fruit. Pick a side. Sail for the biggest bounty on the sea.</span></p>
+    <ul class="stats rise" aria-label="The game at a glance">
+      <li><b>6</b> <span class="th">เกาะ</span><span class="en">islands</span></li>
+      <li><b>Lv 1–1000</b> <span class="th">ให้ไต่</span><span class="en">to climb</span></li>
+      <li><b>5</b> <span class="th">ผลไม้วิเศษ</span><span class="en">magic fruits</span></li>
+      <li><b>4</b> <span class="th">เรือให้ขับ</span><span class="en">ships to sail</span></li>
+    </ul>
+    <div class="actions rise">
+      <a class="btn btn-gold" href="#trailer"><span class="th">ดูเทรลเลอร์</span><span class="en">Watch the trailer</span></a>
+      <a class="btn btn-ghost" href="#progression"><span class="th">ดู Progression</span><span class="en">See the progression</span></a>
+      <span class="soon"><b><span class="th">เร็วๆ นี้</span><span class="en">Coming soon</span></b> <span class="th">บน Roblox</span><span class="en">to Roblox</span></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="band" id="trailer">
+    <div class="wrap trailer">
+      <div class="head">
+        <p class="eyebrow"><span class="th">เทรลเลอร์</span><span class="en">Trailer</span></p>
+        <h2><span class="th">พลังผลไม้ ต่อสู้ของจริง</span><span class="en">Fruit powers, real fights</span></h2>
+        <p class="lede"><span class="th">ทุกช็อตอัดจากในเกมจริง ทั้งพลังผลไม้ การปะทะ Elite ทั้งกลางวันและกลางคืน การออกเรือ และนักล่าค่าหัวที่ตามมาถึงกลางทะเล</span><span class="en">Every shot was recorded in the game: fruit powers, Elite fights by day and night, setting sail, and bounty hunters who chase you across the sea.</span></p>
+      </div>
+      <video controls playsinline preload="metadata" poster="media/trailer-poster.jpg">
+        <source src="media/trailer.mp4" type="video/mp4">
+      </video>
+    </div>
+  </section>
+
+  <section class="band" id="fruits">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">ผลไม้วิเศษ</span><span class="en">Magic fruits</span></p>
+        <h2><span class="th">กินหนึ่งคำ ได้หนึ่งพลัง</span><span class="en">One bite, one power</span></h2>
+        <p class="lede"><span class="th">หาผลไม้ให้เจอแล้วกิน ธาตุของมันจะกลายเป็นสไตล์การต่อสู้ของคุณ แต่ละผลมีชุดสกิลของตัวเอง ที่ปลดล็อกและแรงขึ้นเรื่อยๆ ยิ่งใช้บ่อย</span><span class="en">Find a fruit, eat it and its element becomes your fighting style. Each fruit has its own set of skills that unlock and grow stronger the more you use them.</span></p>
+      </div>
+      <div class="fruit-banner">
+        <img src="img/game-fruits.jpg" alt="In-game screenshot: the five magic fruits in a row on a ship's deck." width="1600" height="610" loading="lazy">
+      </div>
+      <div class="fruits">
+        <article class="fruit" data-el="flame"><img src="fruits/icon-flame.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลเพลิง</span><span class="en">Flame</span></h3><p><span class="th">หมัดไฟ วงแหวนเพลิง และระเบิดที่เผาทั้งสนาม</span><span class="en">Fire punches, flame rings and blasts that light up the field.</span></p></div></article>
+        <article class="fruit later" data-el="ice"><img src="fruits/icon-ice.png" alt="" width="240" height="240" loading="lazy"><div><p class="later-tag"><span class="th">เร็วๆ นี้</span><span class="en">Coming soon</span></p><h3><span class="th">ผลน้ำแข็ง</span><span class="en">Ice</span></h3><p><span class="th">ผลึกแหลมพุ่งขึ้นจากพื้น แช่แข็งคู่ต่อสู้กลางศึก</span><span class="en">Sharp crystals that burst from the ground and freeze the fight.</span></p></div></article>
+        <article class="fruit" data-el="suke"><img src="fruits/icon-suke.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลล่องหน</span><span class="en">Suke</span></h3><p><span class="th">ตัวโปร่งใสจนมองไม่เห็น แล้วจู่โจมจากมุมที่ไม่มีใครระวัง</span><span class="en">Turn see-through and strike from where no one is looking.</span></p></div></article>
+        <article class="fruit" data-el="spin"><img src="fruits/icon-spin.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลพายุหมุน</span><span class="en">Spin</span></h3><p><span class="th">ลมหมุนและการพุ่งหมุนตัวที่กวาดศัตรูกระเด็น</span><span class="en">Whirlwinds and spinning rushes that sweep enemies away.</span></p></div></article>
+        <article class="fruit" data-el="smoke"><img src="fruits/icon-smoke.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลควัน</span><span class="en">Smoke</span></h3><p><span class="th">ลอยมากับกลุ่มควัน บังตาทั้งฝูง แล้วหายตัวไป</span><span class="en">Roll in on a cloud, blind the crowd and slip out again.</span></p></div></article>
+        <article class="fruit" data-el="bomb"><img src="fruits/icon-bomb.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลระเบิด</span><span class="en">Bomb</span></h3><p><span class="th">ระเบิดลูกใหญ่ ชนวนสั้น รัศมีกว้าง</span><span class="en">Big explosions with a short fuse and a wide blast.</span></p></div></article>
+      </div>
+      <p class="note"><span class="th">ถือพลังผลไม้ได้ทีละหนึ่งผล เลือกผลที่เข้ากับสไตล์การสู้ของคุณ</span><span class="en">You carry one fruit power at a time, so choose the one that fits how you fight.</span></p>
+    </div>
+  </section>
+
+  <section class="band" id="islands">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">เส้นทางการเดินเรือ</span><span class="en">The voyage</span></p>
+        <h2><span class="th">5 เกาะ จาก Lv 1 ถึง 1000</span><span class="en">Five islands from Lv 1 to 1000</span></h2>
+        <p class="lede"><span class="th">ล่องเรือจากหมู่บ้านกังหันลมแสนสงบไปจนถึงเมืองท่ายักษ์ใหญ่ ทุกเกาะมีเควส ลูกเรือศัตรู และบอสที่เฝ้าเส้นทางทะเลช่วงถัดไป แถมยังมีเกาะลับที่นักสู้มาฝึกให้ร่างกายแข็งแกร่ง ทุกภาพในส่วนนี้แคปจากในเกมจริง</span><span class="en">Sail from a quiet windmill village to a giant port city. Every island has its own quests, crews and a boss guarding the next stretch of sea, plus one hidden island where fighters learn to harden their bodies. Every picture here is a screenshot from the game.</span></p>
+      </div>
+      <div class="route">
+        <article class="stop">
+          <figure><img src="img/game-island-foosha.jpg" alt="In-game screenshot: windmills and colourful houses above a sandy beach and a wooden pier." width="1200" height="800" loading="lazy">
+            <div class="tag"><span class="chip"><span class="th">เกาะ 1</span><span class="en">Island 1</span></span><span class="chip lv">Lv 1–50</span></div></figure>
+          <div class="txt"><h3><span class="th">หมู่บ้านกังหันลม</span><span class="en">Windmill Village</span></h3><p><span class="th">เกาะเริ่มต้น ฝึกต่อสู้บนทุ่งหญ้าเหนือท่าเรือ ที่แก๊งโจรรอดักอยู่ที่ขอบหมู่บ้าน</span><span class="en">The starting island. Learn to fight on the fields above the pier, where bandit gangs wait at the edge of town.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Bandit Boss</p></div>
+        </article>
+        <article class="stop">
+          <figure><img src="img/game-island-shell.jpg" alt="In-game screenshot: a terraced harbour town under two giant blue navy towers." width="1200" height="800" loading="lazy">
+            <div class="tag"><span class="chip"><span class="th">เกาะ 2</span><span class="en">Island 2</span></span><span class="chip lv">Lv 51–150</span></div></figure>
+          <div class="txt"><h3><span class="th">เมืองป้อมทหารเรือ</span><span class="en">Navy Fortress Town</span></h3><p><span class="th">เมืองท่าขั้นบันไดใต้หอคอยทหารเรือสีน้ำเงินคู่ยักษ์ ทหารเรือลาดตระเวนทั่วเมือง และกัปตันในเสื้อคลุมขาวคุมฐานทัพ</span><span class="en">A terraced harbour town under two giant blue navy towers. Navy soldiers patrol the streets, and their captain in a white coat runs the base.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Axer</p></div>
+        </article>
+        <article class="stop">
+          <figure><img src="img/game-island-orange.jpg" alt="In-game screenshot: a colourful harbour town with a big mansion on the hill." width="1200" height="800" loading="lazy">
+            <div class="tag"><span class="chip"><span class="th">เกาะ 3</span><span class="en">Island 3</span></span><span class="chip lv">Lv 151–300</span></div></figure>
+          <div class="txt"><h3><span class="th">ท่าเรือคณะละครสัตว์</span><span class="en">Circus Harbour</span></h3><p><span class="th">กลุ่มโจรคณะละครเร่ยึดเมืองท่าหลากสีแห่งนี้ไว้ทั้งเมือง ลูกเรือของมันเดินคุมทุกถนน และกัปตันรอคุณอยู่ในเมือง</span><span class="en">A travelling circus crew has taken over this colourful harbour town. Its pirates hold every street, and their captain waits in town.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> <span class="th">กัปตันคณะละคร</span><span class="en">the circus captain</span></p></div>
+        </article>
+        <article class="stop hidden-isle">
+          <figure><img src="img/game-island-haki.jpg" alt="In-game screenshot: a sandy town split by canals between round green hills." width="1200" height="800" loading="lazy">
+            <div class="tag"><span class="chip"><span class="th">เกาะฮาคิ</span><span class="en">Haki island</span></span><span class="chip lv">Lv 200+</span></div></figure>
+          <div class="txt"><h3><span class="th">เมืองคลองกลางผืนทราย</span><span class="en">Sand Canal Town</span></h3><p><span class="th">เมืองทรายเงียบสงบที่มีคลองตัดผ่าน ล้อมด้วยเนินเขาเขียวกลมมน เอาชนะนักรบที่นี่ แล้วปรมาจารย์จะสอนวิธีเคลือบแขนด้วยเกราะแข็ง</span><span class="en">A quiet sandy town cut by canals, ringed by round green hills. Beat its warriors and the old master teaches you to coat your arms in hardened armour.</span></p><p class="boss"><b><span class="th">ปลดล็อก:</span><span class="en">Unlocks:</span></b> <span class="th">ฮาคิเกราะ</span><span class="en">Armor Haki</span></p></div>
+        </article>
+        <article class="stop">
+          <figure><img src="img/game-island-baratie.jpg" alt="In-game screenshot: a restaurant built on a giant fish-shaped ship in the open sea." width="1200" height="800" loading="lazy">
+            <div class="tag"><span class="chip"><span class="th">เกาะ 4</span><span class="en">Island 4</span></span><span class="chip lv">Lv 301–500</span></div></figure>
+          <div class="txt"><h3><span class="th">ภัตตาคารลอยน้ำ</span><span class="en">The Floating Restaurant</span></h3><p><span class="th">ภัตตาคารบนเรือรูปหัวปลายักษ์กลางทะเลเปิด โจรสลัดบุกมาปล้น นำทัพโดยนักสู้ในชุดเกราะทอง</span><span class="en">A restaurant built on a giant fish-shaped ship in the open sea. Pirates come to raid it, led by a fighter in golden armour.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Shilder</p></div>
+        </article>
+        <article class="stop">
+          <figure><img src="img/game-island-logue.jpg" alt="In-game screenshot: a big stone port city with a fountain square and tall towers." width="1200" height="800" loading="lazy">
+            <div class="tag"><span class="chip"><span class="th">เกาะ 5</span><span class="en">Island 5</span></span><span class="chip lv">Lv 501–1000</span></div></figure>
+          <div class="txt"><h3><span class="th">เมืองท่าใหญ่</span><span class="en">The Great Port</span></h3><p><span class="th">เกาะสุดท้ายและใหญ่ที่สุด เมืองท่าหินที่มีลานน้ำพุกลางเมือง ลูกเรือสุดโหดมารวมตัวที่นี่ และนักสู้พลังควันครองเมืองอยู่</span><span class="en">The last and biggest island: a stone port city with a fountain square, where the toughest crews gather. A fighter made of smoke rules the town.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Rigel</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="features">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">ชีวิตกลางทะเล</span><span class="en">Life at sea</span></p>
+        <h2><span class="th">ทุกการเดินทาง จบด้วยการต่อสู้</span><span class="en">Every voyage ends in a fight</span></h2>
+      </div>
+      <div class="rows">
+        <div class="row">
+          <div class="pic"><img class="shot" src="img/game-factions.jpg" alt="In-game screenshot: a white-sailed navy galleon and a black-sailed pirate galleon face each other below the navy towers." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">โจรสลัด หรือ ทหารเรือ</span><span class="en">Pirates or navy</span></p><h3><span class="th">เลือกฝ่ายของคุณ</span><span class="en">Pick your side</span></h3><p><span class="th">เป็นโจรสลัดเพื่ออิสรภาพและค่าหัวก้อนโต หรือเป็นทหารเรือเพื่อรักษาความสงบของท้องทะเล ฝ่ายที่เลือกจะกำหนดว่าใครอยู่ข้างคุณ และใครจะตามล่าคุณ</span><span class="en">Join the pirates for freedom and big bounties, or the navy to keep the sea in order. Your side decides who stands with you and who comes after you.</span></p>
+            <ul class="facts"><li><span class="th">โจรสลัดสะสมค่าหัว</span><span class="en">Pirates earn Bounty</span></li><li><span class="th">ทหารเรือสะสมเกียรติยศ</span><span class="en">Navy earns Honor</span></li><li><span class="th">กิลด์และพันธมิตร</span><span class="en">Guilds and allies</span></li></ul></div>
+        </div>
+        <div class="row">
+          <div class="pic"><img class="shot" src="img/game-hunters.jpg" alt="In-game screenshot: a bounty hunter's black-sailed galleon at sea, its hunter standing at the bow." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">นักล่าค่าหัว</span><span class="en">Bounty hunters</span></p><h3><span class="th">ยิ่งดัง ยิ่งโดนล่า</span><span class="en">Get famous, get hunted</span></h3><p><span class="th">ชนะผู้เล่นคนอื่นแล้วค่าหัวจะพุ่งขึ้น เมื่อค่าหัวสูงพอ นักล่าจะขับเรือมาจอดที่เกาะเพื่อจับตัวคุณ ถ้าคุณขับเรือหนี พวกมันจะกลับขึ้นเรือแล้วไล่ตามกลางทะเล ค่าหัวยิ่งสูง นักล่ายิ่งเก่ง และอาจมาพร้อมลูกน้องหลายลำ</span><span class="en">Win fights against other players and your bounty climbs. Climb high enough and hunter crews sail in, dock by your island and come for you. Run by boat and they take the helm and chase you across the sea. The higher your bounty, the stronger they get, and big bounties bring crews and more than one ship.</span></p>
+            <ul class="facts"><li><span class="th">มาด้วยเรือจริง</span><span class="en">They arrive by ship</span></li><li><span class="th">4 ระดับความโหด</span><span class="en">4 hunter tiers</span></li><li><span class="th">ลูกน้องตั้งแต่ค่าหัว 1M</span><span class="en">Crews from 1M bounty</span></li><li><span class="th">คนเดิมนับค่าหัวได้วันละ 3 ครั้ง</span><span class="en">The same rival counts 3 times a day</span></li></ul></div>
+        </div>
+        <div class="row">
+          <div class="pic"><img class="shot" src="img/game-elites.jpg" alt="In-game screenshot: the five Elites standing in a row in the windmill village, each with a katana." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">ศัตรูระดับ Elite</span><span class="en">Elite enemies</span></p><h3><span class="th">Elite สู้เหมือนผู้เล่นจริง</span><span class="en">Elites fight like real players</span></h3><p><span class="th">Elite ปรากฏตัวเป็นอีเวนต์ทั่วเซิร์ฟเวอร์ แต่ละตัวมีพลังผลไม้ของตัวเอง ใช้ Dash กระโดดกลางอากาศ Soru และสกิลชุดเดียวกับผู้เล่น ความเก่งปรับตามเกาะที่เจอ และให้รางวัลคุ้มค่าเหนื่อย</span><span class="en">Elites drop into the server as an event, each with its own fruit power. They dash, jump through the air, flash-step and cast the same skills players use. Their strength matches the island you meet them on, and the rewards are worth the trouble.</span></p>
+            <ul class="facts"><li><span class="th">1 ตัวต่อ 1 ผลไม้</span><span class="en">One per fruit</span></li><li><span class="th">เลเวลตามเกาะ</span><span class="en">Level by island</span></li><li><span class="th">เปิดฮาคิตอนเลือดน้อย</span><span class="en">Haki when wounded</span></li></ul></div>
+        </div>
+        <div class="row">
+          <div class="pic"><img class="shot" src="media/shot-sea-ships.jpg" alt="An in-game screenshot of a ship sailing on bright blue water." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">เรือของคุณเอง</span><span class="en">Your own ship</span></p><h3><span class="th">จากแพ สู่เรือรบ Galleon</span><span class="en">From raft to war galleon</span></h3><p><span class="th">ยืนคุมพวงมาลัยเรือแล้วข้ามทะเลเปิดระหว่างเกาะ คลื่นทะเลขยับจริง เรือโคลงตามคลื่น และเพื่อนในลูกเรือยืนบนดาดฟ้าไปด้วยกันได้ เริ่มจากแพไม้ แล้วไต่ขึ้นไปจนถึงเรือรบลำใหญ่ที่จุคนได้ทั้งลูกเรือ</span><span class="en">Take the helm and cross the open sea between islands. The waves really roll, the ship rides them, and your crew stands on deck with you. Start on a few lashed logs and work your way up to a warship with a full crew on deck.</span></p>
+            <ul class="facts"><li>Raft</li><li>Fishing Boat</li><li>Pirate Sloop</li><li>War Galleon</li></ul></div>
+        </div>
+        <div class="row">
+          <div class="pic"><img class="shot" src="media/shot-spin-rush.jpg" alt="A player spins forward in a rush of wind." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">ฝึกให้เก่งขึ้น</span><span class="en">Grow your fighter</span></p><h3><span class="th">สเตตัส สกิล และวิชาเคลื่อนไหว</span><span class="en">Stats, skills and moves</span></h3><p><span class="th">อัปสเตตัสหมัด ดาบ ผลไม้ หรือพลังป้องกันตามสไตล์ของคุณ ฝึก Mastery เพื่อปลดล็อกสกิล Z X C V แล้วเรียนวิชาเคลื่อนไหวอย่างการเดินบนอากาศและการพุ่งแวบหายตัว ทุกคนเกิดมาพร้อมเผ่าที่สุ่มได้ ซึ่งมีความสามารถต่างกัน</span><span class="en">Put points into fists, sword, fruit or defence to match how you fight. Train mastery to unlock your Z, X, C and V skills, then learn moves like sky-walking and the flash step. Everyone starts with a random race, each with its own perks.</span></p>
+            <ul class="facts"><li><span class="th">หมัด + ดาบ Katana</span><span class="en">Fists + Katana</span></li><li><span class="th">4 เผ่า</span><span class="en">4 races</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="cast">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">บอสและคู่ปรับ</span><span class="en">Bosses and rivals</span></p>
+        <h2><span class="th">ใครรออยู่กลางทะเล</span><span class="en">Who waits at sea</span></h2>
+        <p class="lede"><span class="th">ภาพจากในเกมจริง หน้าตาเหมือนที่ผู้เล่นเจอทุกตัว บอสประจำเกาะสู้ด้วยสกิล Dash และฮาคิเหมือนผู้เล่น นักล่าค่าหัวเก่งขึ้นตามค่าหัวของคุณ</span><span class="en">Straight from the game, exactly as players meet them. Island bosses fight with skills, dashes and Haki like a player; bounty hunters grow with your bounty.</span></p>
+      </div>
+      <div class="cast">
+        <article class="card"><figure><img src="cast/game-bandit-boss.jpg" alt="In-game: the Bandit Boss, with wild red hair, a big moustache and a brown vest." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 20</p><h3>Bandit Boss</h3><p><span class="th">บอสเกาะ 1 หัวหน้าแก๊งโจรที่ขอบหมู่บ้านกังหันลม</span><span class="en">Island 1 boss, leader of the bandit gangs at the edge of Windmill Village.</span></p></div></article>
+        <article class="card"><figure><img src="cast/game-axer.jpg" alt="In-game: Axer, a navy captain in a white coat and cap." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 110</p><h3>Axer</h3><p><span class="th">บอสเกาะ 2 กัปตันทหารเรือในเสื้อคลุมขาว</span><span class="en">Island 2 boss, the navy captain in a white coat.</span></p></div></article>
+        <article class="card"><figure><img src="cast/game-haki-warrior.jpg" alt="In-game: a Haki Warrior in a black coat with a katana." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 210</p><h3>Haki Warrior</h3><p><span class="th">นักรบเกาะฮาคิ ชนะ 100 ตัวเพื่อเรียนฮาคิเกราะ</span><span class="en">Warriors of the Haki island. Beat 100 to learn Armor Haki.</span></p></div></article>
+        <article class="card"><figure><img src="cast/game-shilder.jpg" alt="In-game: Shilder in golden armour." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 410</p><h3>Shilder</h3><p><span class="th">บอสเกาะ 4 นักสู้ชุดเกราะทอง ผู้นำการบุกภัตตาคารลอยน้ำ</span><span class="en">Island 4 boss in golden armour, leading the raid on the floating restaurant.</span></p></div></article>
+        <article class="card"><figure><img src="cast/game-rigel.jpg" alt="In-game: Rigel, a bald fighter with a long black moustache and a dark suit." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 910</p><h3>Rigel</h3><p><span class="th">บอสเกาะ 5 นักสู้พลังควัน ต้องใช้ฮาคิถึงจะตีเข้า</span><span class="en">Island 5 boss with a smoke power. Only Haki can hit him.</span></p></div></article>
+        <article class="card next"><figure><img src="cast/game-saber-boss.jpg" alt="In-game: the Saber Boss, with long white hair and a dark coat." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl"><span class="th">อัปเดตแรก · Lv 850</span><span class="en">Update 1 · Lv 850</span></p><h3>Saber Boss</h3><p><span class="th">บอสปลายเกม เรียกออกมาด้วยไอเท็มจาก Elite ดรอปดาบ Saber</span><span class="en">The end-game duelist, summoned with an item Elites drop. Drops the Saber.</span></p></div></article>
+        <article class="card"><figure><img src="cast/game-bounty-hunter.jpg" alt="In-game: a bounty hunter with a katana on the deck of a black-sailed ship." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 100–1000</p><h3>Bounty Hunter</h3><p><span class="th">ขับเรือมาล่าผู้เล่นที่ค่าหัวหรือเกียรติยศสูงเกินไป ค่าหัวคุณยิ่งสูง ยิ่งเก่ง</span><span class="en">Sails in for players whose Bounty or Honor got too high, and gets stronger as yours grows.</span></p></div></article>
+        <article class="card"><figure><img src="cast/game-elites.jpg" alt="In-game: three of the five Elites standing in the windmill village." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 25–500</p><h3>Elites</h3><p><span class="th">5 ตัว 5 ผลไม้ โผล่เป็นอีเวนต์ เลเวลตามเกาะ</span><span class="en">Five of them, one per fruit. Event spawns, level by island.</span></p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="gameplay">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">ภาพจากในเกม</span><span class="en">In the game</span></p>
+        <h2><span class="th">ภาพจริงจากในเกม</span><span class="en">Straight from the game</span></h2>
+        <p class="lede"><span class="th">ภาพหน้าจอจากเวอร์ชันที่กำลังพัฒนา ไม่ได้ตกแต่ง มีแต่การต่อสู้ล้วนๆ</span><span class="en">Screenshots from current builds. No edits, just the fight.</span></p>
+      </div>
+      <div class="shots">
+        <figure><img src="media/shot-flame-burst.jpg" alt="A flame burst erupts in the village." width="1600" height="900" loading="lazy"><figcaption><span class="th">ระเบิดเพลิง</span><span class="en">Flame burst</span></figcaption></figure>
+        <figure><img src="media/shot-explosion.jpg" alt="An explosion hits a group of enemies." width="1600" height="900" loading="lazy"><figcaption><span class="th">ระเบิดกลางหมู่บ้าน</span><span class="en">Blast in the village</span></figcaption></figure>
+        <figure><img src="media/shot-meteor.jpg" alt="A fiery meteor crashes into the field and throws up chunks of ground." width="1600" height="900" loading="lazy"><figcaption><span class="th">อุกกาบาตไฟ</span><span class="en">Meteor drop</span></figcaption></figure>
+        <figure><img src="media/shot-fire-fist.jpg" alt="A fire fist explodes against an enemy." width="1600" height="900" loading="lazy"><figcaption><span class="th">หมัดเพลิง</span><span class="en">Fire fist</span></figcaption></figure>
+        <figure><img src="media/shot-storm-meteor.jpg" alt="A whirlwind meets a falling meteor." width="1600" height="900" loading="lazy"><figcaption><span class="th">พายุปะทะไฟ</span><span class="en">Storm and fire</span></figcaption></figure>
+        <figure><img src="media/shot-sea-sail.jpg" alt="Standing at the mast of a ship under full sail." width="1600" height="900" loading="lazy"><figcaption><span class="th">กางใบออกทะเล</span><span class="en">Under sail</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="band partners" id="progression">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Progression</p>
+        <h2><span class="th">สร้างเสร็จแล้ว และเล่นได้จริงวันนี้</span><span class="en">Built and playable today</span></h2>
+        <p class="lede"><span class="th">Fruit Piece อยู่ในแนวเกมต่อสู้พลังผลไม้สไตล์อนิเมะ ซึ่งเป็นหนึ่งในแนวที่คนเล่นเยอะที่สุดบน Roblox ระบบหลักทั้งหมดด้านล่างนี้สร้างเสร็จและทดสอบในเกมแล้ว</span><span class="en">Fruit Piece plays in the anime fruit-fighting genre, one of the most played on Roblox. Every core system below is built and tested in the game.</span></p>
+      </div>
+      <ul class="built">
+        <li><span class="tick">✓</span><div><b><span class="th">6 เกาะ เลเวล 1–1000</span><span class="en">6 islands, levels 1–1000</span></b><span class="d"><span class="th">เควสทุกเกาะ มอนเก่งกว่าเลเวลเควสเล็กน้อยให้ท้าทาย</span><span class="en">Quests on every island; monsters sit a little above the quest level to keep it a challenge.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">ระบบต่อสู้แบบผู้เล่น</span><span class="en">Player-style combat</span></b><span class="d"><span class="th">คอมโบหมัด ดาบ 5 ผลไม้ สกิลปลดล็อกตาม Mastery</span><span class="en">Fist and sword combos, 5 fruits, skills that unlock with mastery.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">บอส 5 ตัว + Elite 5 ตัว</span><span class="en">5 bosses + 5 Elites</span></b><span class="d"><span class="th">AI ที่ใช้สกิล Dash Geppo Soru และฮาคิเหมือนผู้เล่น</span><span class="en">AI that uses skills, dashes, air jumps, flash steps and Haki like a player.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">PvP + ค่าหัว + นักล่า</span><span class="en">PvP, bounties and hunters</span></b><span class="d"><span class="th">2 ฝ่าย ค่าหัว/เกียรติยศ นักล่าขับเรือมาไล่ล่า 4 ระดับ</span><span class="en">Two sides, Bounty and Honor, hunters who arrive by ship in 4 tiers.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">เรือและทะเล</span><span class="en">Ships and sea</span></b><span class="d"><span class="th">เรือ 4 แบบ ยืนขับได้ คลื่นทะเลจริง ลูกเรือยืนบนดาดฟ้าได้</span><span class="en">4 ships with a standing helm, rolling waves and crew riding on deck.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">ระบบสังคม</span><span class="en">Social systems</span></b><span class="d"><span class="th">กิลด์ พันธมิตร 4 เผ่า และของดรอปจากบอส</span><span class="en">Guilds, allies, 4 races and gear drops from bosses.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">AI ศัตรูทดสอบครบทุกเกาะ</span><span class="en">Enemy AI tested on every island</span></b><span class="d"><span class="th">ถึงตัวผู้เล่น 89 จาก 89 จุดทดสอบ ใช้แรงเซิร์ฟเวอร์ไม่ถึง 0.1 ms ต่อเฟรม</span><span class="en">Reached the player at 89 of 89 test spots, using under 0.1 ms of server time a frame.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">เสียงและบรรยากาศ</span><span class="en">Sound and atmosphere</span></b><span class="d"><span class="th">เพลงประจำเกาะ เสียงคลื่นกลางทะเล และเสียงฝีเท้าตามพื้นผิว</span><span class="en">Island music, sea waves out on the water and footsteps that change with the ground.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">ระบบตรวจจับการโกง</span><span class="en">Cheat watcher</span></b><span class="d"><span class="th">เซิร์ฟเวอร์ตรวจความเร็ว การบิน และการวาร์ปที่ผิดปกติ</span><span class="en">The server watches for speed, flying and teleport hacks.</span></span></div></li>
+      </ul>
+
+      <h3 class="sub"><span class="th">เส้นทางพัฒนาต่อ</span><span class="en">What comes next</span></h3>
+      <ol class="road">
+        <li class="done"><span class="when"><span class="th">ตอนนี้</span><span class="en">Now</span></span><h4><span class="th">เกมหลักครบ</span><span class="en">Core game built</span></h4><p><span class="th">6 เกาะ เลเวล 1–1000 บอส Elite นักล่า เรือ และ PvP เล่นได้แล้วในเวอร์ชันทดสอบ</span><span class="en">6 islands, levels 1–1000, bosses, Elites, hunters, ships and PvP, playable in the test build.</span></p></li>
+        <li><span class="when"><span class="th">เปิดเกม</span><span class="en">Launch</span></span><h4><span class="th">เปิดให้เล่นจริง</span><span class="en">Open to players</span></h4><p><span class="th">เกลาหน้าจอและปุ่มบนมือถือให้เรียบร้อย เปิดระบบเซฟ ปิดเครื่องมือทดสอบ และเปิดสินค้า Robux ที่เตรียมไว้</span><span class="en">Phone screens and buttons polished, saving on, test tools off and the prepared Robux products switched on.</span></p></li>
+        <li><span class="when"><span class="th">อัปเดต 1</span><span class="en">Update 1</span></span><h4><span class="th">ปลายเกม</span><span class="en">End game</span></h4><p><span class="th">บอส Saber Lv 850 สไตล์เตะ Black Leg และเกาะฝึกวิชาเคลื่อนไหว</span><span class="en">The Lv 850 Saber Boss, the Black Leg kicking style and a training island for movement skills.</span></p></li>
+        <li><span class="when"><span class="th">ถัดไป</span><span class="en">After that</span></span><h4><span class="th">ศึกกลางทะเล</span><span class="en">Sea battles</span></h4><p><span class="th">เรือมีเลือด ปืนใหญ่ และสัตว์ประหลาดเจ้าทะเล พร้อมขยายเลเวลสูงสุด</span><span class="en">Ship health, cannons and sea beasts, then a higher level cap.</span></p></li>
+      </ol>
+
+      <div class="split" style="margin-top: clamp(44px, 6vw, 72px);">
+        <div class="panel">
+          <p class="eyebrow"><span class="th">รูปแบบรายได้</span><span class="en">How it earns</span></p>
+          <h3><span class="th">สินค้า Robux ที่ซื้อซ้ำได้</span><span class="en">Repeatable Robux products</span></h3>
+          <ul>
+            <li><span class="pill ready"><span class="th">พร้อม</span><span class="en">Ready</span></span><span><b><span class="th">รีเซ็ตสเตตัส</span><span class="en">Stat reset</span></b> <span class="th">ลองบิลด์ใหม่ได้ไม่ต้องเริ่มเกมใหม่</span><span class="en">try a new build without starting over</span></span></li>
+            <li><span class="pill ready"><span class="th">พร้อม</span><span class="en">Ready</span></span><span><b><span class="th">ลบผลไม้</span><span class="en">Fruit removal</span></b> <span class="th">เปลี่ยนพลังผลไม้ได้ทันที</span><span class="en">swap to a new fruit power</span></span></li>
+            <li><span class="pill ready"><span class="th">พร้อม</span><span class="en">Ready</span></span><span><b><span class="th">เรียกบอสเกิดใหม่</span><span class="en">Boss respawn</span></b> <span class="th">ทั้งเซิร์ฟได้ลุ้นบอสพร้อมกัน</span><span class="en">brings every island boss back for the whole server</span></span></li>
+            <li><span class="pill plan"><span class="th">วางแผน</span><span class="en">Planned</span></span><span><b><span class="th">สุ่มเผ่าใหม่</span><span class="en">Race reroll</span></b> <span class="th">ลุ้นเผ่าที่ชอบ</span><span class="en">roll for a different race</span></span></li>
+          </ul>
+          <p class="lede" style="font-size: .93rem;"><span class="th">สินค้าทั้งหมดสร้างไว้ในเกมแล้ว เปิดขายได้ทันทีด้วยการใส่รหัสสินค้าเพียงค่าเดียว</span><span class="en">All of these are already in the game; each goes on sale by setting one product id.</span></p>
+        </div>
+        <div class="panel">
+          <p class="eyebrow"><span class="th">ปลอดภัยสำหรับเด็ก</span><span class="en">Made for kids</span></p>
+          <h3><span class="th">ออกแบบสำหรับผู้เล่นอายุ 8–15 ปี</span><span class="en">Designed for players aged 8–15</span></h3>
+          <ul>
+            <li><span class="pill safe">✓</span><span><b><span class="th">ไม่มีเลือดหรือความรุนแรงน่ากลัว</span><span class="en">No blood or scary violence</span></b> <span class="th">การต่อสู้สนุกแบบอนิเมะ</span><span class="en">fights are energetic and heroic</span></span></li>
+            <li><span class="pill safe">✓</span><span><b><span class="th">ไม่มีแอลกอฮอล์ ไม่มีบุหรี่</span><span class="en">No alcohol, no smoking</span></b> <span class="th">ตามเกณฑ์เนื้อหา Mild ของ Roblox</span><span class="en">in line with Roblox's Mild content level</span></span></li>
+            <li><span class="pill safe">✓</span><span><b><span class="th">ดีไซน์ต้นฉบับ</span><span class="en">Original designs</span></b> <span class="th">ภาพและตัวละครทำขึ้นเพื่อเกมนี้</span><span class="en">art and characters made for this game</span></span></li>
+            <li><span class="pill safe">✓</span><span><b><span class="th">PvP มีขอบเขต</span><span class="en">PvP with limits</span></b> <span class="th">เขตปลอดภัยในเมือง และจำกัดการไล่ล่าคนเดิมซ้ำ</span><span class="en">safe zones in town and a daily cap on farming the same player</span></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="join">
+    <div class="wrap cta">
+      <p class="mark" aria-label="Fruit Piece"><span data-text="FRUIT">FRUIT</span><span data-text="PIECE">PIECE</span></p>
+      <p><span class="th">เกมกำลังจะเปิดให้เล่นบน Roblox เร็วๆ นี้ ระหว่างนี้ติดตามการพัฒนาได้ทาง devlog ของผู้สร้างบน TikTok</span><span class="en">The game opens on Roblox soon. Until then, follow the build through the creator's TikTok devlog.</span></p>
+      <a class="btn btn-gold" href="#top"><span class="th">กลับขึ้นด้านบน</span><span class="en">Back to the top</span></a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><span class="th">Fruit Piece เป็นเกมผจญภัยโจรสลัดต้นฉบับที่กำลังสร้างบน Roblox โดยครีเอเตอร์อิสระ สำหรับผู้เล่นอายุ 8–15 ปี ทุกภาพและวิดีโอบนหน้านี้มาจากตัวเกมจริง</span><span class="en">Fruit Piece is an original pirate adventure being built for Roblox by an independent creator, made for players aged 8 to 15. Every picture and video on this page comes from the game itself.</span></p>
+  </div>
+</footer>
+
+<script>
+  // language toggle (remembered in this browser when it can be)
+  (function () {
+    var root = document.documentElement;
+    function show(lang) {
+      root.setAttribute("data-lang", lang);
+      root.setAttribute("lang", lang);
+      document.getElementById("lang-th").setAttribute("aria-pressed", String(lang === "th"));
+      document.getElementById("lang-en").setAttribute("aria-pressed", String(lang === "en"));
+      try { localStorage.setItem("fp-lang", lang); } catch (e) {}
+    }
+    document.querySelectorAll(".lang button").forEach(function (b) {
+      b.addEventListener("click", function () { show(b.getAttribute("data-set")); });
+    });
+    show(root.getAttribute("data-lang") === "en" ? "en" : "th");
+  })();
+
+  // embers rising over the key art (off for reduced motion, paused off screen)
+  (function () {
+    var canvas = document.querySelector(".embers");
+    if (!canvas || !canvas.getContext) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var ctx = canvas.getContext("2d");
+    var hero = canvas.parentElement;
+    var sparks = [], w = 0, h = 0, dpr = 1, running = true, last = 0;
+    function size() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = hero.clientWidth; h = hero.clientHeight;
+      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function spark(fresh) {
+      return {
+        x: Math.random() * w,
+        y: fresh ? Math.random() * h : h + 10,
+        r: 0.8 + Math.random() * 2.2,
+        vy: 18 + Math.random() * 42,
+        vx: -8 + Math.random() * 16,
+        life: 0,
+        max: 4 + Math.random() * 6,
+        hue: 18 + Math.random() * 30
+      };
+    }
+    size();
+    var count = w < 700 ? 34 : 70;
+    for (var i = 0; i < count; i++) sparks.push(spark(true));
+    window.addEventListener("resize", size);
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (e) { running = e[0].isIntersecting; if (running) { last = 0; requestAnimationFrame(tick); } }).observe(hero);
+    }
+    function tick(t) {
+      if (!running) return;
+      var dt = last ? Math.min((t - last) / 1000, 0.05) : 0.016;
+      last = t;
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = "lighter";
+      for (var i = 0; i < sparks.length; i++) {
+        var s = sparks[i];
+        s.life += dt; s.y -= s.vy * dt; s.x += (s.vx + Math.sin(s.life * 2 + i) * 10) * dt;
+        var k = s.life / s.max;
+        if (k >= 1 || s.y < -10) { sparks[i] = spark(false); continue; }
+        var a = Math.sin(Math.PI * k) * 0.85;
+        var g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 4);
+        g.addColorStop(0, "hsla(" + s.hue + ",100%,70%," + a + ")");
+        g.addColorStop(1, "hsla(" + s.hue + ",100%,50%,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 4, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalCompositeOperation = "source-over";
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
+
+</body>
+</html>
