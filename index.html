@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Rubik:wght@400;500;700&family=Kanit:wght@500;700&family=IBM+Plex+Sans+Thai:wght@400;500;700&display=swap">
 <style>
-/* Layout: a voyage down the page - key art, trailer, fruits, the island route in sailing order, life at sea, the cast,
-   real screenshots, then the partner brief (what is built, what comes next, how it earns). One dark sea at night. */
+/* Layout: a voyage down the page - key art, what's new, trailer, fruits, the island route in sailing order, life at sea,
+   gear, the cast, real screenshots, then the partner brief (what is built, what comes next, how it earns). One dark sea at night. */
 :root {
   --night: #0B1220;      /* deep night sea */
   --hull: #131D33;       /* raised panels */
@@ -75,6 +75,7 @@ p { margin: 0; }
 .lang button { appearance: none; border: 0; background: transparent; color: var(--mist); font: 700 .85rem var(--body); padding: 8px 11px; cursor: pointer; }
 .lang button[aria-pressed="true"] { background: var(--gold); color: var(--tar); }
 @media (max-width: 720px) { .links a:not(.partner) { display: none; } .links { margin-left: auto; } .links .long { display: none; } .links a { padding: 8px 8px; } }
+@media (max-width: 480px) { .links a[href="#progression"] { display: none; } }
 
 /* ---------- wordmark: gold letters on a thick dark outline, like the game logo ---------- */
 .mark { display: grid; font-family: "Lilita One", "Arial Black", sans-serif; line-height: .86; letter-spacing: .02em; }
@@ -89,7 +90,7 @@ p { margin: 0; }
 /* ---------- hero ---------- */
 .hero { position: relative; overflow: hidden; }
 .hero-art { position: relative; }
-.hero-art img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.hero-art img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: 78% 50%; }
 .hero-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--night) 100%); }
 .embers { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 .hero-copy { position: relative; z-index: 2; display: grid; gap: 22px; padding-block: 8px 48px; }
@@ -145,9 +146,17 @@ p { margin: 0; }
 .fruit[data-el="smoke"] h3 { color: #C7BEDD; }
 .fruit[data-el="bomb"] h3 { color: #FF7A4D; }
 .note { margin-top: 18px; color: var(--mist); font-size: .95rem; }
-.fruit.later { border-style: dashed; background: transparent; }
-.fruit.later img { opacity: .55; filter: grayscale(.4) drop-shadow(0 6px 10px rgba(0,0,0,.45)); }
-.fruit .later-tag { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 2px; }
+.fruit > div { display: grid; gap: 4px; min-width: 0; }
+.fruit.is-new { border-color: rgba(143,216,255,.55); }
+.fruit .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: .8rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.rar { padding: 1px 8px; border-radius: 999px; font-size: .72rem; font-weight: 700; letter-spacing: .04em; background: rgba(163,176,201,.16); color: var(--mist); }
+.rar.uncommon { background: rgba(139,227,181,.14); color: #8BE3B5; }
+.rar.rare { background: rgba(79,179,255,.16); color: #7FC6FF; }
+.rar.epic { background: rgba(199,125,255,.18); color: #D3A6FF; }
+.rar.legendary { background: rgba(255,186,74,.18); color: var(--gold-hi); }
+.rar.fresh { background: var(--gold); color: var(--tar); }
+.skills { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 0; margin: 4px 0 0; list-style: none; font-size: .8rem; color: var(--ink); }
+.skills b { color: var(--gold); font-weight: 700; }
 
 /* ---------- island route (order = levelling order) ---------- */
 .route { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
@@ -166,6 +175,12 @@ p { margin: 0; }
 .stop .boss { font-size: .9rem; color: var(--ink); }
 .stop .boss b { color: var(--gold); font-weight: 700; }
 .stop.hidden-isle { border-color: rgba(255,213,105,.45); }
+.stop.wide { grid-column: 1 / -1; border-color: rgba(240,102,46,.6); }
+.stop.wide figure img { aspect-ratio: 16 / 9; }
+@media (min-width: 900px) {
+  .stop.wide { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); grid-template-rows: auto; }
+  .stop.wide .txt { align-content: center; padding: 24px 28px; }
+}
 
 /* ---------- life at sea ---------- */
 .rows { display: grid; gap: clamp(36px, 6vw, 72px); }
@@ -184,7 +199,7 @@ p { margin: 0; }
 
 /* ---------- the cast: in-game renders ---------- */
 .cast { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-@media (min-width: 720px) { .cast { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 900px) { .cast { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 .card { display: grid; grid-template-rows: auto 1fr; border-radius: var(--radius); overflow: hidden; background: var(--hull); border: 1px solid var(--rope); }
 .card figure { margin: 0; background: var(--hull); }
 .card figure img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
@@ -201,6 +216,54 @@ p { margin: 0; }
 .shots figure { margin: 0; display: grid; gap: 8px; }
 .shots img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; border: 1px solid var(--rope); }
 .shots figcaption { font-size: .85rem; color: var(--mist); }
+
+/* ---------- what's new: the video, the big cards, then every change by date ---------- */
+.news { background: linear-gradient(180deg, #111C34, var(--night) 60%); }
+.news-lead { display: grid; gap: 24px; align-items: center; margin-bottom: 22px; }
+.news-lead video { width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); border: 1px solid rgba(240,102,46,.6); background: #000; box-shadow: 0 30px 80px -30px rgba(240,102,46,.55); }
+.news-lead .txt { display: grid; gap: 12px; min-width: 0; }
+.news-lead h3 { font-size: var(--step-2); }
+.news-lead p { color: var(--mist); }
+@media (min-width: 900px) { .news-lead { grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 36px; } }
+.news-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+@media (min-width: 640px) { .news-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .news-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.news-card { display: grid; grid-template-rows: auto 1fr; border-radius: var(--radius); overflow: hidden; background: var(--hull); border: 1px solid var(--rope); }
+.news-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.news-card .txt { display: grid; gap: 8px; align-content: start; padding: 16px 18px 20px; }
+.news-card h3 { font-size: 1.3rem; }
+.news-card p { color: var(--mist); font-size: .95rem; line-height: 1.5; }
+.log { display: grid; gap: 14px; }
+.log-day { display: grid; gap: 14px; padding: 18px; border-radius: var(--radius); background: var(--hull); border: 1px solid var(--rope); }
+.log-day h4 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 1.3rem; color: var(--gold-hi); font-variant-numeric: tabular-nums; }
+:root[data-lang="th"] .log-day h4 { font-weight: 700; }
+.log-cols { display: grid; gap: 16px; min-width: 0; }
+.log-head { font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+.log-head.add { color: #8BE3B5; }
+.log-head.fix { color: #7FC6FF; }
+.log ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--mist); font-size: .94rem; line-height: 1.5; }
+@media (min-width: 900px) {
+  .log-day { grid-template-columns: 120px minmax(0, 1fr); gap: 20px; padding: 22px 24px; }
+  .log-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+}
+
+/* ---------- ships and hunter tiers: numbers read from the game ---------- */
+.ships { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (min-width: 900px) { .ships { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.ship { display: grid; grid-template-rows: auto 1fr; border-radius: var(--radius); overflow: hidden; background: var(--hull); border: 1px solid var(--rope); }
+.ship img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.ship .txt { display: grid; gap: 4px; align-content: start; padding: 12px 14px 16px; }
+.ship h3 { font-size: 1.15rem; }
+.ship p { color: var(--mist); font-size: .86rem; line-height: 1.45; font-variant-numeric: tabular-nums; }
+.ship .price { color: var(--gold-hi); font-weight: 700; }
+.table-wrap { overflow-x: auto; margin-top: 4px; }
+.tiers { width: 100%; min-width: 340px; border-collapse: collapse; font-size: .86rem; font-variant-numeric: tabular-nums; }
+.tiers th { text-align: left; color: var(--gold); font-weight: 700; padding: 6px 8px; border-bottom: 1px solid var(--rope); white-space: nowrap; }
+.tiers td { padding: 6px 8px; color: var(--ink); border-bottom: 1px solid rgba(36,49,79,.55); white-space: nowrap; }
+.store { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+.panel .store li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 8px; align-items: center; color: var(--mist); font-size: .84rem; line-height: 1.3; }
+.store img { width: 44px; height: 44px; object-fit: contain; }
+.store b { display: block; color: var(--ink); font-size: .86rem; }
 
 /* ---------- partner brief ---------- */
 .partners { background: linear-gradient(180deg, var(--night), #0E1628 30%, var(--night)); }
@@ -267,6 +330,7 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
   <div class="wrap">
     <a class="mark" href="#top" aria-label="Fruit Piece, back to top"><span data-text="FRUIT">FRUIT</span><span data-text="PIECE">PIECE</span></a>
     <div class="links">
+      <a class="partner" href="#updates"><span class="th">อัปเดตล่าสุด</span><span class="en">What's new</span></a>
       <a href="#trailer"><span class="th">เทรลเลอร์</span><span class="en">Trailer</span></a>
       <a href="#fruits"><span class="th">ผลไม้วิเศษ</span><span class="en">Fruits</span></a>
       <a href="#islands"><span class="th">เกาะ</span><span class="en">Islands</span></a>
@@ -283,7 +347,7 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
 
 <header class="hero" id="top">
   <div class="hero-art">
-    <img src="img/game-hero.jpg" alt="In-game screenshot: a black-sailed galleon under a full moon by the navy fortress town, a fighter standing at the bow." width="1576" height="1080" fetchpriority="high">
+    <img src="img/game-hero.jpg" alt="In-game screenshot: a war galleon and a pirate sloop in a night storm off the windmill village, lightning striking behind the masts." width="1920" height="1080" fetchpriority="high">
   </div>
   <canvas class="embers" aria-hidden="true"></canvas>
   <div class="wrap hero-copy">
@@ -291,20 +355,129 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
     <h1 class="mark rise" aria-label="Fruit Piece"><span data-text="FRUIT">FRUIT</span><span data-text="PIECE">PIECE</span></h1>
     <p class="tagline rise"><span class="th">กินผลไม้วิเศษ เลือกฝ่าย แล้วออกเรือไล่ล่าค่าหัวที่สูงที่สุดในทะเล</span><span class="en">Eat a magic fruit. Pick a side. Sail for the biggest bounty on the sea.</span></p>
     <ul class="stats rise" aria-label="The game at a glance">
-      <li><b>6</b> <span class="th">เกาะ</span><span class="en">islands</span></li>
+      <li><b>7</b> <span class="th">เกาะ</span><span class="en">islands</span></li>
       <li><b>Lv 1–1000</b> <span class="th">ให้ไต่</span><span class="en">to climb</span></li>
-      <li><b>5</b> <span class="th">ผลไม้วิเศษ</span><span class="en">magic fruits</span></li>
+      <li><b>6</b> <span class="th">ผลไม้วิเศษ</span><span class="en">magic fruits</span></li>
+      <li><b>6</b> <span class="th">บอส</span><span class="en">bosses</span></li>
       <li><b>4</b> <span class="th">เรือให้ขับ</span><span class="en">ships to sail</span></li>
     </ul>
     <div class="actions rise">
-      <a class="btn btn-gold" href="#trailer"><span class="th">ดูเทรลเลอร์</span><span class="en">Watch the trailer</span></a>
-      <a class="btn btn-ghost" href="#progression"><span class="th">ดู Progression</span><span class="en">See the progression</span></a>
+      <a class="btn btn-gold" href="#updates"><span class="th">ดูอัปเดตล่าสุด</span><span class="en">See what's new</span></a>
+      <a class="btn btn-ghost" href="#trailer"><span class="th">ดูเทรลเลอร์</span><span class="en">Watch the trailer</span></a>
       <span class="soon"><b><span class="th">เร็วๆ นี้</span><span class="en">Coming soon</span></b> <span class="th">บน Roblox</span><span class="en">to Roblox</span></span>
     </div>
   </div>
 </header>
 
 <main>
+  <section class="band news" id="updates">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">อัปเดตล่าสุด · 2 พ.ย. 2026</span><span class="en">Latest update · 2 Nov 2026</span></p>
+        <h2><span class="th">มีอะไรใหม่ในเกม</span><span class="en">What's new in the game</span></h2>
+        <p class="lede"><span class="th">ตั้งแต่อัปเดตเว็บครั้งก่อนเมื่อ 27 ต.ค. เกมเพิ่มเกาะ บอส ผลไม้ ดาบ นักล่ากลางทะเล สภาพอากาศ และหน้าจอใหม่ทั้งเกม ภาพและคลิปทุกชิ้นเก็บจากเกมเวอร์ชันล่าสุด รายการเต็มว่าเพิ่มและแก้อะไรไปบ้างอยู่ท้ายส่วนนี้</span><span class="en">Since the last site update on 27 Oct the game has gained an island, a boss, a fruit, a sword, hunters at sea, weather and a whole new interface. Every picture and clip comes from the latest build. The full list of what was added and fixed is at the end of this section.</span></p>
+      </div>
+
+      <div class="news-lead">
+        <video controls playsinline preload="metadata" poster="media/update-saber-poster.jpg">
+          <source src="media/update-saber.mp4" type="video/mp4">
+        </video>
+        <div class="txt">
+          <p class="eyebrow"><span class="th">คลิปอัปเดต</span><span class="en">Update video</span></p>
+          <h3><span class="th">เกาะใหม่ และ Saber Boss</span><span class="en">A new island and the Saber Boss</span></h3>
+          <p><span class="th">ล่องเรือไปเกาะ Saber คุยกับผู้เรียกบอส แล้วปลุก Saber Boss ขึ้นมาดวล เกาะจะสั่น ฟ้าจะครึ้ม คลื่นจะสูงขึ้น และเพลงบอสจะดังไปทั่วทะเลแถบนั้น พอเลือดต่ำกว่าครึ่ง มันจะเอาจริงและใช้สกิลถี่ขึ้น 3 เท่า ใครตีถึง 10% ของเลือดได้รางวัลเต็มทุกคน</span><span class="en">Sail to Saber Island, talk to the Boss Summoner and wake the Saber Boss for a duel. The island shakes, the sky closes in, the waves rise and the boss music carries out to sea. Under half health it gets serious and casts three times as often. Everyone who deals 10% of its health gets the full reward.</span></p>
+          <ul class="facts"><li>Lv 950</li><li><span class="th">เลือด 596,250</span><span class="en">596,250 HP</span></li><li><span class="th">2 เฟส</span><span class="en">2 phases</span></li><li><span class="th">ดรอป Saber 10%</span><span class="en">10% Saber drop</span></li></ul>
+        </div>
+      </div>
+
+      <div class="news-grid">
+        <article class="news-card"><img src="img/game-ice-spikes.jpg" alt="In-game screenshot: a player sends a wave of ice spikes across the field, snowflakes bursting in the air." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">ผลน้ำแข็ง ครบ 4 สกิล</span><span class="en">The Ice fruit, all four skills</span></h3><p><span class="th">หนามน้ำแข็งที่ไต่ขึ้นตึกได้ หมัดน้ำแข็ง ร่างโคลนที่สู้แทนแล้วระเบิด และ Ice Age ที่แช่แข็งทั้งพื้นที่นาน 30 วินาที คนกินผลนี้เดินบนทะเลได้ด้วย</span><span class="en">Spikes that climb up buildings, a frost punch, clones that fight for you and blow up, and Ice Age, which freezes a whole area for 30 seconds. Whoever eats it can also walk on the sea.</span></p></div></article>
+        <article class="news-card"><img src="media/shot-saber-duel.jpg" alt="In-game screenshot: the white-haired Saber Boss in a dark coat faces a player on the arena grass." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">ดาบ Saber ระดับ Legendary</span><span class="en">The Legendary Saber</span></h3><p><span class="th">ดาบดรอปจาก Saber Boss มีสกิลของตัวเอง 3 ท่า Storm Dash พุ่งตามเมาส์แล้วฟันทุกคนที่ผ่าน Gale Slash ส่งคลื่นดาบ และ Tempest Wave ฟันรัว 5 ครั้งก่อนระเบิด</span><span class="en">Dropped by the Saber Boss, with three skills of its own. Storm Dash rushes where you aim and cuts everyone it passes, Gale Slash throws a blade of wind, and Tempest Wave cuts five times before it blows up.</span></p></div></article>
+        <article class="news-card"><img src="img/game-sea-hunter.jpg" alt="In-game screenshot: a black-sailed Sea Hunter galleon sailing on open water, more ships on the horizon." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">Sea Hunter นักล่ากลางทะเล</span><span class="en">Sea Hunters</span></h3><p><span class="th">เรือนักล่าแล่นอยู่รอบตัวคุณกลางทะเล ไม่ยุ่งกับใครจนกว่าจะโดนตีก่อน มี 4 ระดับ ชนะแล้วได้เงิน ค่าหัว และลุ้นผลไม้ นานๆ ทีจะมีลำที่หันมาล่าคุณเอง</span><span class="en">Hunter ships sail around you at sea and leave you alone until you hit first. There are four tiers, with money, bounty and a shot at a fruit. Once in a while, one turns on you by itself.</span></p></div></article>
+        <article class="news-card"><img src="img/game-weather.jpg" alt="In-game screenshot: lightning strikes behind a galleon in heavy rain at night." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">สภาพอากาศสุ่มทั่วแผนที่</span><span class="en">Random weather</span></h3><p><span class="th">ฝน ฝนหนัก และพายุ เกิดแบบสุ่มแล้วลอยไปรอบแผนที่ มีฟ้าแลบ ฟ้าร้อง ลมพัด และคลื่นที่สูงขึ้นตามความแรง เป็นบรรยากาศล้วนๆ ไม่กระทบการต่อสู้</span><span class="en">Rain, heavy rain and storms appear at random and drift around the map, with lightning, thunder, wind and waves that grow with them. It is all atmosphere and never touches combat.</span></p></div></article>
+        <article class="news-card"><img src="img/game-boss-storm.jpg" alt="In-game screenshot: dark clouds and rising waves around Saber Island while the boss is awake." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">ปลุกบอสแล้วทะเลเปลี่ยน</span><span class="en">Wake the boss, change the sea</span></h3><p><span class="th">ตราบใดที่ Saber Boss ยังตื่น รอบเกาะจะมีเมฆดำและคลื่นสูง ทั้งเรือและคนว่ายน้ำลอยขึ้นลงตามคลื่นจริง บนเกาะเองน้ำยังสงบให้เรือเทียบท่าได้</span><span class="en">While the Saber Boss is awake, black clouds and high waves surround the island. Ships and swimmers ride them for real, and the water at the island stays calm enough to dock.</span></p></div></article>
+        <article class="news-card"><img src="img/game-hud.jpg" alt="In-game screenshot: the new hand-inked interface with a compass, level and health bars, a hotbar and Ice skills." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">หน้าจอใหม่ทั้งเกม</span><span class="en">A whole new interface</span></h3><p><span class="th">ทุกหน้าจอวาดใหม่ในสไตล์ลายเส้นพู่กัน ทั้งแถบเลือด กระเป๋า สเตตัส กิลด์ เควส และบทสนทนา NPC พร้อมเสียงกดปุ่ม อนิเมชันเด้ง และเข็มทิศด้านบนจอ</span><span class="en">Every screen is redrawn in a brush-ink style: health bars, bag, stats, guild, quests and NPC talk, with button sounds, bouncy motion and a compass across the top.</span></p></div></article>
+        <article class="news-card"><img src="img/game-shop.jpg" alt="In-game screenshot: the Shop window with six Game Passes." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">ร้านค้าในเกม</span><span class="en">The in-game Shop</span></h3><p><span class="th">ปุ่ม Shop เปิดหน้าร้านที่มี Game Pass 6 แบบ เช่น 2X EXP, Fruit Finder และ Fast Sailing พร้อมแท็บไอเทม ตอนนี้ยังไม่เปิดขาย จะขึ้นว่า Soon</span><span class="en">The Shop button opens six Game Passes such as 2X EXP, Fruit Finder and Fast Sailing, plus an Items tab. Nothing is on sale yet, so passes read "Soon".</span></p></div></article>
+        <article class="news-card"><img src="img/game-island-foosha.jpg" alt="In-game screenshot: the rebuilt windmill village seen from the water, with a wooden pier." width="1200" height="800" loading="lazy"><div class="txt"><h3><span class="th">ทะเลใหม่ และเกาะที่สร้างใหม่</span><span class="en">A new sea and rebuilt islands</span></h3><p><span class="th">ทะเลระบบใหม่ คลื่นขยับจริงและเรือโคลงตามคลื่น หมู่บ้านกังหันลมกับเมืองป้อมทหารเรือถูกสร้างใหม่ทั้งเกาะ พร้อมบ้าน ต้นไม้ และท่าเรือชุดใหม่</span><span class="en">A new sea whose waves really move and rock your ship. The windmill village and the navy fortress town were rebuilt from the ground up, with new houses, trees and piers.</span></p></div></article>
+        <article class="news-card"><img src="img/game-elites.jpg" alt="In-game screenshot: all six Elites standing in a row in the windmill village." width="1600" height="900" loading="lazy"><div class="txt"><h3><span class="th">Elite ตัวที่ 6: Frost Warden</span><span class="en">Elite number six: Frost Warden</span></h3><p><span class="th">Elite ผลน้ำแข็งที่ต้องใช้ฮาคิถึงจะตีเข้า ใช้ Ice Age กางอาณาเขตใส่คุณได้ นักล่าค่าหัวก็สุ่มได้พลังน้ำแข็งเหมือนกัน</span><span class="en">An Ice Elite that only Haki can hit, and it can throw Ice Age down on you. Bounty hunters can now roll the Ice power too.</span></p></div></article>
+      </div>
+
+      <h3 class="sub"><span class="th">เพิ่มอะไร แก้อะไรไปบ้าง</span><span class="en">Everything added and fixed</span></h3>
+      <div class="log">
+        <article class="log-day">
+          <h4><span class="th">2 พ.ย.</span><span class="en">2 Nov</span></h4>
+          <div class="log-cols">
+            <div><p class="log-head add"><span class="th">เพิ่มใหม่</span><span class="en">Added</span></p><ul>
+              <li><span class="th">ฝน ฝนหนัก และพายุ สุ่มเกิดแล้วลอยไปรอบแผนที่ คลื่นสูงขึ้นตามความแรง</span><span class="en">Rain, heavy rain and storms appear at random and drift around the map, with waves that grow with them.</span></li>
+              <li><span class="th">ฟ้าแลบ ฟ้าร้อง เสียงฝน และลมที่พัดสายฝนให้เอียงตามแรงลม</span><span class="en">Lightning, thunder, rain sounds and wind that leans the rain.</span></li>
+            </ul></div>
+            <div><p class="log-head fix"><span class="th">แก้ไขและปรับ</span><span class="en">Fixed and changed</span></p><ul>
+              <li><span class="th">เรือเบรกเองทุกครั้งที่ขึ้นสันคลื่นสูง ตอนนี้แล่นเต็มความเร็วตลอดทางแม้ในพายุ</span><span class="en">Boats braked on every high wave crest. They now hold full speed, even in a storm.</span></li>
+              <li><span class="th">ตอนว่ายน้ำรอบหมู่บ้านกังหันลม ตัวละครหลุดจากท่าว่ายน้ำเวลาคลื่นลง</span><span class="en">Swimming near the windmill village, your character dropped out of the swim whenever a wave fell.</span></li>
+            </ul></div>
+          </div>
+        </article>
+        <article class="log-day">
+          <h4><span class="th">1 พ.ย.</span><span class="en">1 Nov</span></h4>
+          <div class="log-cols">
+            <div><p class="log-head add"><span class="th">เพิ่มใหม่</span><span class="en">Added</span></p><ul>
+              <li><span class="th">Sea Hunter เรือนักล่าเป็นกลางกลางทะเล 4 ระดับ พร้อมรางวัลเงิน ค่าหัว และผลไม้</span><span class="en">Sea Hunters: neutral hunter ships in four tiers, with money, bounty and fruit rewards.</span></li>
+              <li><span class="th">ผู้เรียกบอสบนเกาะ Saber ปลุกบอสได้ฟรี ครั้งละตัว และบอสอยู่จนกว่าจะถูกล้ม ไม่มีเวลาจำกัด</span><span class="en">The Boss Summoner on Saber Island wakes the boss for free, one at a time, and it stays until it is beaten, with no time limit.</span></li>
+              <li><span class="th">ตอนบอสตื่น เกาะสั่น ฟ้าครึ้ม คลื่นสูงรอบเกาะ และมีเพลงบอส</span><span class="en">When the boss wakes, the island shakes, the sky darkens, waves rise around the island and the boss music plays.</span></li>
+            </ul></div>
+            <div><p class="log-head fix"><span class="th">แก้ไขและปรับ</span><span class="en">Fixed and changed</span></p><ul>
+              <li><span class="th">รางวัลบอสทุกตัวแชร์กันแล้ว ตีถึง 10% ของเลือดได้รางวัลเต็มและสุ่มของดรอปเอง</span><span class="en">Every boss now shares its rewards: deal 10% of its health for the full reward and your own drop rolls.</span></li>
+              <li><span class="th">แก้เกมหยุดค้าง "Gameplay Paused" ตอนเกิดใหม่ที่เกาะไกล</span><span class="en">Fixed the "Gameplay Paused" stop when respawning on a far island.</span></li>
+              <li><span class="th">ชื่อบนหัว NPC ตรงกันทั้งเกม เครื่องหมาย ! คือให้เควส และ $ คือขายของ แยกสีตามหน้าที่</span><span class="en">NPC names now match across the game: ! gives quests and $ takes money, each role with its own colour.</span></li>
+              <li><span class="th">แก้ข้อความในเกม ประกาศ Elite บอกชื่อเกาะจริง และเรียก Armor Haki ชื่อเดียวทั้งเกม</span><span class="en">Text fixes: Elite notices name the real island, and Armor Haki goes by one name everywhere.</span></li>
+              <li><span class="th">เสียงคลื่นไม่ดังผิดที่บนเกาะ Saber แล้ว และไฟบนเรือไม่จ้าเกินไป</span><span class="en">The sea sound no longer plays on Saber Island, and ship lanterns are no longer too bright.</span></li>
+            </ul></div>
+          </div>
+        </article>
+        <article class="log-day">
+          <h4><span class="th">28–30 ต.ค.</span><span class="en">28–30 Oct</span></h4>
+          <div class="log-cols">
+            <div><p class="log-head add"><span class="th">เพิ่มใหม่</span><span class="en">Added</span></p><ul>
+              <li><span class="th">หน้าจอใหม่ทั้งเกมสไตล์ลายเส้นพู่กัน พร้อมเสียงและอนิเมชัน</span><span class="en">A whole new brush-ink interface, with sounds and motion.</span></li>
+              <li><span class="th">ผลน้ำแข็ง Z X C V และเดินบนทะเล</span><span class="en">The Ice fruit's Z, X, C and V, plus walking on the sea.</span></li>
+              <li><span class="th">Frost Warden และนักล่าค่าหัวพลังน้ำแข็ง</span><span class="en">Frost Warden and Ice bounty hunters.</span></li>
+              <li><span class="th">สร้างหมู่บ้านกังหันลมและเมืองป้อมทหารเรือใหม่ทั้งเกาะ</span><span class="en">The windmill village and the navy fortress town, rebuilt from the ground up.</span></li>
+              <li><span class="th">แถบเลือดศัตรูเข้าธีมเกม ขอบจอแดงเมื่อโดนตี และเสียงหัวใจเต้นเมื่อเลือดน้อย</span><span class="en">Enemy health bars in the game's style, a red screen edge when hit and a heartbeat at low health.</span></li>
+              <li><span class="th">กระเป๋าเหนือ hotbar และปุ่มรายชื่อผู้เล่นบนมือถือ</span><span class="en">A backpack above the hotbar and a player list button on phones.</span></li>
+              <li><span class="th">หินแตกตอนสกิล Gale Slash และ Tempest Wave ลงพื้น</span><span class="en">Broken rock where Gale Slash and Tempest Wave land.</span></li>
+            </ul></div>
+            <div><p class="log-head fix"><span class="th">แก้ไขและปรับ</span><span class="en">Fixed and changed</span></p><ul>
+              <li><span class="th">หน้าจอรีเซ็ตทุกครั้งที่ตาย ตอนนี้เมนูที่พับไว้อยู่เหมือนเดิม</span><span class="en">The interface reset on every death. Folded menus now stay folded.</span></li>
+              <li><span class="th">คูลดาวน์ขึ้นว่าพร้อมทั้งที่ยังใช้ไม่ได้ เวลาสลับอาวุธหรือ Mastery ขึ้น</span><span class="en">Skills showed as ready while still cooling down, after switching weapons or gaining mastery.</span></li>
+              <li><span class="th">ตัวอักษรบนจอ 1440p และ 4K เส้นหนาจนอ่านยาก</span><span class="en">Text outlines clogged up on 1440p and 4K screens.</span></li>
+              <li><span class="th">Hitbox ของ Gale Slash และ Tempest Wave ใหญ่ขึ้น 1.5 เท่า</span><span class="en">Gale Slash and Tempest Wave hitboxes are 1.5 times bigger.</span></li>
+              <li><span class="th">เลือด Saber Boss เพิ่ม 2.5 เท่า และสกิล Saber ปลดล็อกที่ Mastery 100 / 200 / 300</span><span class="en">Saber Boss health is up 2.5 times, and Saber skills unlock at mastery 100 / 200 / 300.</span></li>
+            </ul></div>
+          </div>
+        </article>
+        <article class="log-day">
+          <h4><span class="th">27 ต.ค.</span><span class="en">27 Oct</span></h4>
+          <div class="log-cols">
+            <div><p class="log-head add"><span class="th">เพิ่มใหม่</span><span class="en">Added</span></p><ul>
+              <li><span class="th">ดาบ Saber พร้อมสกิล 3 ท่า และจอขอบแดงตอนใช้สกิล</span><span class="en">The Saber with its three skills and a red screen edge when they fire.</span></li>
+              <li><span class="th">Saber Boss Lv 950 แบบ 2 เฟส และเกาะ Saber ของมัน</span><span class="en">The two-phase Lv 950 Saber Boss and its own island.</span></li>
+              <li><span class="th">ปุ่ม Shop พร้อม Game Pass และไอเทม</span><span class="en">The Shop button with Game Passes and items.</span></li>
+              <li><span class="th">ทะเลระบบใหม่ คลื่นขยับจริง เรือโคลงตามคลื่น</span><span class="en">A new sea whose waves move and rock your ship.</span></li>
+              <li><span class="th">เข็มทิศด้านบนจอ</span><span class="en">A compass across the top of the screen.</span></li>
+              <li><span class="th">กด Backspace เพื่อทิ้งผลไม้ และมีกล่องถามก่อนกินผล</span><span class="en">Backspace drops a fruit, and a box asks before you eat one.</span></li>
+            </ul></div>
+            <div><p class="log-head fix"><span class="th">แก้ไขและปรับ</span><span class="en">Fixed and changed</span></p><ul>
+              <li><span class="th">จอสั่นตอนใช้สกิลแรงจนเวียนหัว ลดลงเหลือครึ่งเดียว</span><span class="en">Skill screen shake was strong enough to make you dizzy. It is now halved.</span></li>
+              <li><span class="th">ผลไม้บนแผนที่ตั้งนิ่งอยู่บนพื้น ไม่ลอยและไม่เรืองแสงแล้ว</span><span class="en">Fruits on the map now sit still on the ground, with no floating or glow.</span></li>
+              <li><span class="th">ผลที่อยู่ใน hotbar จะหายเมื่อตายหรือออกเกม ต้องเก็บเข้า Bag ถึงจะอยู่</span><span class="en">Fruits on the hotbar are lost when you die or leave. Put them in the Bag to keep them.</span></li>
+            </ul></div>
+          </div>
+        </article>
+      </div>
+      <p class="note"><span class="th">ทุกอย่างในหน้านี้อยู่ในเวอร์ชันทดสอบ ตัวเลขอาจปรับก่อนเปิดเกมจริง</span><span class="en">Everything on this page is in the test build, and numbers may change before launch.</span></p>
+    </div>
+  </section>
+
   <section class="band" id="trailer">
     <div class="wrap trailer">
       <div class="head">
@@ -326,17 +499,17 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
         <p class="lede"><span class="th">หาผลไม้ให้เจอแล้วกิน ธาตุของมันจะกลายเป็นสไตล์การต่อสู้ของคุณ แต่ละผลมีชุดสกิลของตัวเอง ที่ปลดล็อกและแรงขึ้นเรื่อยๆ ยิ่งใช้บ่อย</span><span class="en">Find a fruit, eat it and its element becomes your fighting style. Each fruit has its own set of skills that unlock and grow stronger the more you use them.</span></p>
       </div>
       <div class="fruit-banner">
-        <img src="img/game-fruits.jpg" alt="In-game screenshot: the five magic fruits in a row on a ship's deck." width="1600" height="610" loading="lazy">
+        <img src="img/game-fruits.jpg" alt="In-game screenshot: the six magic fruits in a row on the stone quay of the windmill village." width="1600" height="610" loading="lazy">
       </div>
       <div class="fruits">
-        <article class="fruit" data-el="flame"><img src="fruits/icon-flame.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลเพลิง</span><span class="en">Flame</span></h3><p><span class="th">หมัดไฟ วงแหวนเพลิง และระเบิดที่เผาทั้งสนาม</span><span class="en">Fire punches, flame rings and blasts that light up the field.</span></p></div></article>
-        <article class="fruit later" data-el="ice"><img src="fruits/icon-ice.png" alt="" width="240" height="240" loading="lazy"><div><p class="later-tag"><span class="th">เร็วๆ นี้</span><span class="en">Coming soon</span></p><h3><span class="th">ผลน้ำแข็ง</span><span class="en">Ice</span></h3><p><span class="th">ผลึกแหลมพุ่งขึ้นจากพื้น แช่แข็งคู่ต่อสู้กลางศึก</span><span class="en">Sharp crystals that burst from the ground and freeze the fight.</span></p></div></article>
-        <article class="fruit" data-el="suke"><img src="fruits/icon-suke.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลล่องหน</span><span class="en">Suke</span></h3><p><span class="th">ตัวโปร่งใสจนมองไม่เห็น แล้วจู่โจมจากมุมที่ไม่มีใครระวัง</span><span class="en">Turn see-through and strike from where no one is looking.</span></p></div></article>
-        <article class="fruit" data-el="spin"><img src="fruits/icon-spin.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลพายุหมุน</span><span class="en">Spin</span></h3><p><span class="th">ลมหมุนและการพุ่งหมุนตัวที่กวาดศัตรูกระเด็น</span><span class="en">Whirlwinds and spinning rushes that sweep enemies away.</span></p></div></article>
-        <article class="fruit" data-el="smoke"><img src="fruits/icon-smoke.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลควัน</span><span class="en">Smoke</span></h3><p><span class="th">ลอยมากับกลุ่มควัน บังตาทั้งฝูง แล้วหายตัวไป</span><span class="en">Roll in on a cloud, blind the crowd and slip out again.</span></p></div></article>
-        <article class="fruit" data-el="bomb"><img src="fruits/icon-bomb.png" alt="" width="240" height="240" loading="lazy"><div><h3><span class="th">ผลระเบิด</span><span class="en">Bomb</span></h3><p><span class="th">ระเบิดลูกใหญ่ ชนวนสั้น รัศมีกว้าง</span><span class="en">Big explosions with a short fuse and a wide blast.</span></p></div></article>
+        <article class="fruit" data-el="flame"><img src="fruits/icon-flame.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar epic">Epic</span> $100,000</p><h3><span class="th">ผลเพลิง</span><span class="en">Flame</span></h3><p><span class="th">หมัดไฟ วงแหวนเพลิง และระเบิดที่เผาทั้งสนาม</span><span class="en">Fire punches, flame rings and blasts that light up the field.</span></p><ul class="skills"><li><b>Z</b> Fire Fist</li><li><b>X</b> Fire Meteor</li><li><b>C</b> Flame Burst</li><li><b>V</b> Flame Emperor</li></ul></div></article>
+        <article class="fruit is-new" data-el="ice"><img src="fruits/icon-ice.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar fresh"><span class="th">ใหม่</span><span class="en">New</span></span></p><h3><span class="th">ผลน้ำแข็ง</span><span class="en">Ice</span></h3><p><span class="th">หนามน้ำแข็ง ร่างโคลน และอาณาเขตที่แช่แข็งทั้งพื้นที่ แถมเดินบนทะเลได้ ยังไม่เกิดบนแผนที่และไม่มีขายในร้าน</span><span class="en">Ice spikes, clones and a domain that freezes a whole area, and you can walk on the sea. It doesn't spawn on the map or sell in shops yet.</span></p><ul class="skills"><li><b>Z</b> Ice Spikes</li><li><b>X</b> Frost Fist</li><li><b>C</b> Ice Clone</li><li><b>V</b> Ice Age</li></ul></div></article>
+        <article class="fruit" data-el="suke"><img src="fruits/icon-suke.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar">Common</span> $3,000</p><h3><span class="th">ผลล่องหน</span><span class="en">Suke</span></h3><p><span class="th">ตัวโปร่งใสจนมองไม่เห็น แล้วจู่โจมจากมุมที่ไม่มีใครระวัง</span><span class="en">Turn see-through and strike from where no one is looking.</span></p><ul class="skills"><li><b>Z</b> Invisible</li><li><b>X</b> Clear Dash</li></ul></div></article>
+        <article class="fruit" data-el="spin"><img src="fruits/icon-spin.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar">Common</span> $4,000</p><h3><span class="th">ผลพายุหมุน</span><span class="en">Spin</span></h3><p><span class="th">ลมหมุนและการพุ่งหมุนตัวที่กวาดศัตรูกระเด็น</span><span class="en">Whirlwinds and spinning rushes that sweep enemies away.</span></p><ul class="skills"><li><b>Z</b> Spin Rush</li><li><b>X</b> Spin Storm</li></ul></div></article>
+        <article class="fruit" data-el="smoke"><img src="fruits/icon-smoke.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar rare">Rare</span> $40,000</p><h3><span class="th">ผลควัน</span><span class="en">Smoke</span></h3><p><span class="th">ลอยมากับกลุ่มควัน บังตาทั้งฝูง แล้วหายตัวไป</span><span class="en">Roll in on a cloud, blind the crowd and slip out again.</span></p><ul class="skills"><li><b>Z</b> Smoke Shot</li><li><b>X</b> Smoke Stomp</li><li><b>C</b> Smoke Trail</li></ul></div></article>
+        <article class="fruit" data-el="bomb"><img src="fruits/icon-bomb.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar uncommon">Uncommon</span> $12,000</p><h3><span class="th">ผลระเบิด</span><span class="en">Bomb</span></h3><p><span class="th">ระเบิดลูกใหญ่ ชนวนสั้น รัศมีกว้าง</span><span class="en">Big explosions with a short fuse and a wide blast.</span></p><ul class="skills"><li><b>Z</b> Target Bomb</li><li><b>X</b> Bomb Barrage</li></ul></div></article>
       </div>
-      <p class="note"><span class="th">ถือพลังผลไม้ได้ทีละหนึ่งผล เลือกผลที่เข้ากับสไตล์การสู้ของคุณ</span><span class="en">You carry one fruit power at a time, so choose the one that fits how you fight.</span></p>
+      <p class="note"><span class="th">ถือพลังผลไม้ได้ทีละหนึ่งผล ราคาคือราคาที่ร้าน Fruit Dealer ซึ่งสุ่มของเข้าร้านเป็นรอบ ผลไม้ที่เก็บได้ให้ใส่ Bag ไว้ เพราะผลใน hotbar จะหายเมื่อตายหรือออกเกม</span><span class="en">You carry one fruit power at a time. Prices are the Fruit Dealer's, whose stock changes in rounds. Keep the fruits you find in your Bag: fruits on the hotbar are lost when you die or leave.</span></p>
     </div>
   </section>
 
@@ -344,27 +517,27 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
     <div class="wrap">
       <div class="head">
         <p class="eyebrow"><span class="th">เส้นทางการเดินเรือ</span><span class="en">The voyage</span></p>
-        <h2><span class="th">5 เกาะ จาก Lv 1 ถึง 1000</span><span class="en">Five islands from Lv 1 to 1000</span></h2>
-        <p class="lede"><span class="th">ล่องเรือจากหมู่บ้านกังหันลมแสนสงบไปจนถึงเมืองท่ายักษ์ใหญ่ ทุกเกาะมีเควส ลูกเรือศัตรู และบอสที่เฝ้าเส้นทางทะเลช่วงถัดไป แถมยังมีเกาะลับที่นักสู้มาฝึกให้ร่างกายแข็งแกร่ง ทุกภาพในส่วนนี้แคปจากในเกมจริง</span><span class="en">Sail from a quiet windmill village to a giant port city. Every island has its own quests, crews and a boss guarding the next stretch of sea, plus one hidden island where fighters learn to harden their bodies. Every picture here is a screenshot from the game.</span></p>
+        <h2><span class="th">7 เกาะ จาก Lv 1 ถึงบอสปลายเกม</span><span class="en">Seven islands, from Lv 1 to the end-game boss</span></h2>
+        <p class="lede"><span class="th">ล่องเรือจากหมู่บ้านกังหันลมแสนสงบไปจนถึงเมืองท่ายักษ์ใหญ่ ทุกเกาะมีเควส ลูกเรือศัตรู และบอสที่เฝ้าเส้นทางทะเลช่วงถัดไป แถมยังมีเกาะลับที่นักสู้มาฝึกให้ร่างกายแข็งแกร่ง และเกาะ Saber สำหรับคนที่พร้อมดวลบอสปลายเกม ทุกภาพในส่วนนี้แคปใหม่จากในเกมจริง</span><span class="en">Sail from a quiet windmill village to a giant port city. Every island has its own quests, crews and a boss guarding the next stretch of sea, plus one hidden island where fighters learn to harden their bodies, and Saber Island for those ready to duel the end-game boss. Every picture here is a fresh screenshot from the game.</span></p>
       </div>
       <div class="route">
         <article class="stop">
-          <figure><img src="img/game-island-foosha.jpg" alt="In-game screenshot: windmills and colourful houses above a sandy beach and a wooden pier." width="1200" height="800" loading="lazy">
+          <figure><img src="img/game-island-foosha.jpg" alt="In-game screenshot: windmills, big trees and timber houses above a stone quay and a wooden pier." width="1200" height="800" loading="lazy">
             <div class="tag"><span class="chip"><span class="th">เกาะ 1</span><span class="en">Island 1</span></span><span class="chip lv">Lv 1–50</span></div></figure>
           <div class="txt"><h3><span class="th">หมู่บ้านกังหันลม</span><span class="en">Windmill Village</span></h3><p><span class="th">เกาะเริ่มต้น ฝึกต่อสู้บนทุ่งหญ้าเหนือท่าเรือ ที่แก๊งโจรรอดักอยู่ที่ขอบหมู่บ้าน</span><span class="en">The starting island. Learn to fight on the fields above the pier, where bandit gangs wait at the edge of town.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Bandit Boss</p></div>
         </article>
         <article class="stop">
-          <figure><img src="img/game-island-shell.jpg" alt="In-game screenshot: a terraced harbour town under two giant blue navy towers." width="1200" height="800" loading="lazy">
+          <figure><img src="img/game-island-shell.jpg" alt="In-game screenshot: a harbour town and three wooden piers below a high terrace and two giant blue navy towers." width="1200" height="800" loading="lazy">
             <div class="tag"><span class="chip"><span class="th">เกาะ 2</span><span class="en">Island 2</span></span><span class="chip lv">Lv 51–150</span></div></figure>
           <div class="txt"><h3><span class="th">เมืองป้อมทหารเรือ</span><span class="en">Navy Fortress Town</span></h3><p><span class="th">เมืองท่าขั้นบันไดใต้หอคอยทหารเรือสีน้ำเงินคู่ยักษ์ ทหารเรือลาดตระเวนทั่วเมือง และกัปตันในเสื้อคลุมขาวคุมฐานทัพ</span><span class="en">A terraced harbour town under two giant blue navy towers. Navy soldiers patrol the streets, and their captain in a white coat runs the base.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Axer</p></div>
         </article>
         <article class="stop">
-          <figure><img src="img/game-island-orange.jpg" alt="In-game screenshot: a colourful harbour town with a big mansion on the hill." width="1200" height="800" loading="lazy">
+          <figure><img src="img/game-island-orange.jpg" alt="In-game screenshot: houses with red, green, yellow and blue roofs along a stone harbour." width="1200" height="800" loading="lazy">
             <div class="tag"><span class="chip"><span class="th">เกาะ 3</span><span class="en">Island 3</span></span><span class="chip lv">Lv 151–300</span></div></figure>
           <div class="txt"><h3><span class="th">ท่าเรือคณะละครสัตว์</span><span class="en">Circus Harbour</span></h3><p><span class="th">กลุ่มโจรคณะละครเร่ยึดเมืองท่าหลากสีแห่งนี้ไว้ทั้งเมือง ลูกเรือของมันเดินคุมทุกถนน และกัปตันรอคุณอยู่ในเมือง</span><span class="en">A travelling circus crew has taken over this colourful harbour town. Its pirates hold every street, and their captain waits in town.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> <span class="th">กัปตันคณะละคร</span><span class="en">the circus captain</span></p></div>
         </article>
         <article class="stop hidden-isle">
-          <figure><img src="img/game-island-haki.jpg" alt="In-game screenshot: a sandy town split by canals between round green hills." width="1200" height="800" loading="lazy">
+          <figure><img src="img/game-island-haki.jpg" alt="In-game screenshot: a sandy town split by a wide canal between round green hills." width="1200" height="800" loading="lazy">
             <div class="tag"><span class="chip"><span class="th">เกาะฮาคิ</span><span class="en">Haki island</span></span><span class="chip lv">Lv 200+</span></div></figure>
           <div class="txt"><h3><span class="th">เมืองคลองกลางผืนทราย</span><span class="en">Sand Canal Town</span></h3><p><span class="th">เมืองทรายเงียบสงบที่มีคลองตัดผ่าน ล้อมด้วยเนินเขาเขียวกลมมน เอาชนะนักรบที่นี่ แล้วปรมาจารย์จะสอนวิธีเคลือบแขนด้วยเกราะแข็ง</span><span class="en">A quiet sandy town cut by canals, ringed by round green hills. Beat its warriors and the old master teaches you to coat your arms in hardened armour.</span></p><p class="boss"><b><span class="th">ปลดล็อก:</span><span class="en">Unlocks:</span></b> <span class="th">ฮาคิเกราะ</span><span class="en">Armor Haki</span></p></div>
         </article>
@@ -374,9 +547,14 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
           <div class="txt"><h3><span class="th">ภัตตาคารลอยน้ำ</span><span class="en">The Floating Restaurant</span></h3><p><span class="th">ภัตตาคารบนเรือรูปหัวปลายักษ์กลางทะเลเปิด โจรสลัดบุกมาปล้น นำทัพโดยนักสู้ในชุดเกราะทอง</span><span class="en">A restaurant built on a giant fish-shaped ship in the open sea. Pirates come to raid it, led by a fighter in golden armour.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Shilder</p></div>
         </article>
         <article class="stop">
-          <figure><img src="img/game-island-logue.jpg" alt="In-game screenshot: a big stone port city with a fountain square and tall towers." width="1200" height="800" loading="lazy">
+          <figure><img src="img/game-island-logue.jpg" alt="In-game screenshot: a big stone port city with tall round towers and a wide stair up from the quay." width="1200" height="800" loading="lazy">
             <div class="tag"><span class="chip"><span class="th">เกาะ 5</span><span class="en">Island 5</span></span><span class="chip lv">Lv 501–1000</span></div></figure>
           <div class="txt"><h3><span class="th">เมืองท่าใหญ่</span><span class="en">The Great Port</span></h3><p><span class="th">เกาะสุดท้ายและใหญ่ที่สุด เมืองท่าหินที่มีลานน้ำพุกลางเมือง ลูกเรือสุดโหดมารวมตัวที่นี่ และนักสู้พลังควันครองเมืองอยู่</span><span class="en">The last and biggest island: a stone port city with a fountain square, where the toughest crews gather. A fighter made of smoke rules the town.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Rigel</p></div>
+        </article>
+        <article class="stop wide">
+          <figure><img src="img/game-island-saber.jpg" alt="In-game screenshot: a village and three-fingered pier below two walls of rock with a gap leading to the arena." width="1600" height="900" loading="lazy">
+            <div class="tag"><span class="chip"><span class="th">เกาะ Saber</span><span class="en">Saber Island</span></span><span class="chip lv"><span class="th">ปลายเกม</span><span class="en">End game</span></span></div></figure>
+          <div class="txt"><h3><span class="th">เกาะ Saber</span><span class="en">Saber Island</span></h3><p><span class="th">เกาะใหม่ที่ภูเขาสูงล้อมลานประลองไว้ตรงกลาง ท่าเรือสามแฉกกับหมู่บ้านอยู่ตรงทางเข้า มีคนขายเรือและจุดเกิดใหม่รออยู่ เดินขึ้นบันไดผ่านช่องเขาไปหาผู้เรียกบอส Elder Vane แล้วบอกให้ปลุก Saber Boss</span><span class="en">A new island with tall mountains ringing an arena. A three-fingered pier and a village sit at the entrance, with a boat dealer and a respawn point. Head for the stairs in the gap, find the Boss Summoner, Elder Vane, and tell them to wake the Saber Boss.</span></p><p class="boss"><b><span class="th">บอส:</span><span class="en">Boss:</span></b> Saber Boss Lv 950</p><p class="boss"><b><span class="th">ดรอป:</span><span class="en">Drops:</span></b> <span class="th">ดาบ Saber 10%</span><span class="en">the Saber, 10%</span></p></div>
         </article>
       </div>
     </div>
@@ -390,8 +568,8 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
       </div>
       <div class="rows">
         <div class="row">
-          <div class="pic"><img class="shot" src="img/game-factions.jpg" alt="In-game screenshot: a white-sailed navy galleon and a black-sailed pirate galleon face each other below the navy towers." width="1600" height="900" loading="lazy"></div>
-          <div class="txt"><p class="eyebrow"><span class="th">โจรสลัด หรือ ทหารเรือ</span><span class="en">Pirates or navy</span></p><h3><span class="th">เลือกฝ่ายของคุณ</span><span class="en">Pick your side</span></h3><p><span class="th">เป็นโจรสลัดเพื่ออิสรภาพและค่าหัวก้อนโต หรือเป็นทหารเรือเพื่อรักษาความสงบของท้องทะเล ฝ่ายที่เลือกจะกำหนดว่าใครอยู่ข้างคุณ และใครจะตามล่าคุณ</span><span class="en">Join the pirates for freedom and big bounties, or the navy to keep the sea in order. Your side decides who stands with you and who comes after you.</span></p>
+          <div class="pic"><img class="shot" src="img/game-sides.jpg" alt="In-game screenshot: the Choose your side screen, with Pirates and Marines cards." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">โจรสลัด หรือ ทหารเรือ</span><span class="en">Pirates or Marines</span></p><h3><span class="th">เลือกฝ่ายของคุณ</span><span class="en">Pick your side</span></h3><p><span class="th">เป็นโจรสลัดเพื่ออิสรภาพและค่าหัวก้อนโต หรือเป็นทหารเรือเพื่อรักษาความสงบของท้องทะเล ฝ่ายที่เลือกจะกำหนดว่าใครอยู่ข้างคุณ และใครจะตามล่าคุณ เปลี่ยนใจทีหลังได้ที่ Recruiter ในเมือง</span><span class="en">Join the Pirates for freedom and big bounties, or the Marines to keep the sea in order. Your side decides who stands with you and who comes after you. You can switch later at the Recruiter in town.</span></p>
             <ul class="facts"><li><span class="th">โจรสลัดสะสมค่าหัว</span><span class="en">Pirates earn Bounty</span></li><li><span class="th">ทหารเรือสะสมเกียรติยศ</span><span class="en">Navy earns Honor</span></li><li><span class="th">กิลด์และพันธมิตร</span><span class="en">Guilds and allies</span></li></ul></div>
         </div>
         <div class="row">
@@ -400,20 +578,62 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
             <ul class="facts"><li><span class="th">มาด้วยเรือจริง</span><span class="en">They arrive by ship</span></li><li><span class="th">4 ระดับความโหด</span><span class="en">4 hunter tiers</span></li><li><span class="th">ลูกน้องตั้งแต่ค่าหัว 1M</span><span class="en">Crews from 1M bounty</span></li><li><span class="th">คนเดิมนับค่าหัวได้วันละ 3 ครั้ง</span><span class="en">The same rival counts 3 times a day</span></li></ul></div>
         </div>
         <div class="row">
-          <div class="pic"><img class="shot" src="img/game-elites.jpg" alt="In-game screenshot: the five Elites standing in a row in the windmill village, each with a katana." width="1600" height="900" loading="lazy"></div>
-          <div class="txt"><p class="eyebrow"><span class="th">ศัตรูระดับ Elite</span><span class="en">Elite enemies</span></p><h3><span class="th">Elite สู้เหมือนผู้เล่นจริง</span><span class="en">Elites fight like real players</span></h3><p><span class="th">Elite ปรากฏตัวเป็นอีเวนต์ทั่วเซิร์ฟเวอร์ แต่ละตัวมีพลังผลไม้ของตัวเอง ใช้ Dash กระโดดกลางอากาศ Soru และสกิลชุดเดียวกับผู้เล่น ความเก่งปรับตามเกาะที่เจอ และให้รางวัลคุ้มค่าเหนื่อย</span><span class="en">Elites drop into the server as an event, each with its own fruit power. They dash, jump through the air, flash-step and cast the same skills players use. Their strength matches the island you meet them on, and the rewards are worth the trouble.</span></p>
-            <ul class="facts"><li><span class="th">1 ตัวต่อ 1 ผลไม้</span><span class="en">One per fruit</span></li><li><span class="th">เลเวลตามเกาะ</span><span class="en">Level by island</span></li><li><span class="th">เปิดฮาคิตอนเลือดน้อย</span><span class="en">Haki when wounded</span></li></ul></div>
+          <div class="pic"><img class="shot" src="img/game-sea-hunter-2.jpg" alt="In-game screenshot: a Sea Hunter's sloop with shark teeth painted on the bow, alone on the open sea." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">ใหม่ · Sea Hunter</span><span class="en">New · Sea Hunters</span></p><h3><span class="th">จะตีหรือปล่อยผ่าน คุณเลือกเอง</span><span class="en">Fight or sail past, your call</span></h3><p><span class="th">เรือนักล่าจะแล่นมาหาทุกคนที่อยู่กลางทะเล แต่ไม่ยุ่งจนกว่าคุณจะตีก่อน ป้ายบนหัวบอกเลเวล ชนะแล้วได้เงินและค่าหัวตามระดับ คนปิดฉากลุ้นผลไม้ ถ้าแพ้ก็ไม่เสียค่าหัว นานๆ ทีจะมีลำที่หันมาล่าคุณเอง</span><span class="en">Hunter ships come out to anyone at sea, but leave you alone until you hit first. The sign over each hunter shows its level. Winning pays money and bounty by tier, and the finishing blow rolls for a fruit. Losing costs no bounty. Once in a while, one turns on you by itself.</span></p>
+            <div class="table-wrap"><table class="tiers">
+              <thead><tr><th>Lv</th><th><span class="th">เรือ</span><span class="en">Ship</span></th><th><span class="th">ค่าหัว</span><span class="en">Bounty</span></th><th><span class="th">เงิน</span><span class="en">Money</span></th><th><span class="th">ผลไม้</span><span class="en">Fruit</span></th></tr></thead>
+              <tbody>
+                <tr><td>50–300</td><td>Fishing Boat</td><td>+300</td><td>$500</td><td>1%</td></tr>
+                <tr><td>300–600</td><td>Pirate Sloop</td><td>+1,000</td><td>$2,000</td><td>2%</td></tr>
+                <tr><td>600–850</td><td>Pirate Sloop</td><td>+3,000</td><td>$6,000</td><td>3%</td></tr>
+                <tr><td>850–1000</td><td>War Galleon</td><td>+8,000</td><td>$15,000</td><td>5%</td></tr>
+              </tbody>
+            </table></div></div>
         </div>
         <div class="row">
-          <div class="pic"><img class="shot" src="media/shot-sea-ships.jpg" alt="An in-game screenshot of a ship sailing on bright blue water." width="1600" height="900" loading="lazy"></div>
+          <div class="pic"><img class="shot" src="img/game-elites.jpg" alt="In-game screenshot: the six Elites standing in a row in the windmill village, each with a katana." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">ศัตรูระดับ Elite</span><span class="en">Elite enemies</span></p><h3><span class="th">Elite สู้เหมือนผู้เล่นจริง</span><span class="en">Elites fight like real players</span></h3><p><span class="th">Elite ปรากฏตัวเป็นอีเวนต์ทั่วเซิร์ฟเวอร์ แต่ละตัวมีพลังผลไม้ของตัวเอง ใช้ Dash กระโดดกลางอากาศ Soru และสกิลชุดเดียวกับผู้เล่น ความเก่งปรับตามเกาะที่เจอ และให้รางวัลคุ้มค่าเหนื่อย</span><span class="en">Elites drop into the server as an event, each with its own fruit power. They dash, jump through the air, flash-step and cast the same skills players use. Their strength matches the island you meet them on, and the rewards are worth the trouble.</span></p>
+            <ul class="facts"><li>Crimson Blade</li><li>Blast Baron</li><li>Cyclone Jack</li><li>Phantom Nyx</li><li>Haze Captain</li><li>Frost Warden</li></ul></div>
+        </div>
+        <div class="row">
+          <div class="pic"><img class="shot" src="img/game-weather.jpg" alt="In-game screenshot: a galleon and a sloop in the rain at night, lightning striking the village behind them." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">ใหม่ · สภาพอากาศ</span><span class="en">New · Weather</span></p><h3><span class="th">ฝนตกตรงไหนก็ได้ทั่วแผนที่</span><span class="en">Rain anywhere on the map</span></h3><p><span class="th">กลุ่มฝนเกิดแบบสุ่มและลอยไปเรื่อยๆ ที่ใดที่หนึ่งจะมีฝนราว 1 ใน 4 ของเวลา มีตั้งแต่ฝนปรอยไปจนถึงพายุเต็มรูปแบบที่ฟ้าผ่าลงมาและคลื่นสูงขึ้นจริง เรือยังแล่นเต็มความเร็วฝ่าคลื่นได้</span><span class="en">Rain cells appear at random and drift across the map, so any one spot sees rain about a quarter of the time. They run from light rain to full storms with lightning and real high waves, and your ship still holds full speed through them.</span></p>
+            <ul class="facts"><li><span class="th">ฝน</span><span class="en">Rain</span></li><li><span class="th">ฝนหนัก</span><span class="en">Heavy rain</span></li><li><span class="th">พายุ</span><span class="en">Storm</span></li><li><span class="th">ฟ้าแลบ ฟ้าร้อง</span><span class="en">Thunder and lightning</span></li><li><span class="th">ลม</span><span class="en">Wind</span></li></ul></div>
+        </div>
+        <div class="row">
+          <div class="pic"><img class="shot" src="img/game-ships.jpg" alt="In-game screenshot: all four ships on the sea off the windmill village, from the big galleon to the small raft." width="1600" height="900" loading="lazy"></div>
           <div class="txt"><p class="eyebrow"><span class="th">เรือของคุณเอง</span><span class="en">Your own ship</span></p><h3><span class="th">จากแพ สู่เรือรบ Galleon</span><span class="en">From raft to war galleon</span></h3><p><span class="th">ยืนคุมพวงมาลัยเรือแล้วข้ามทะเลเปิดระหว่างเกาะ คลื่นทะเลขยับจริง เรือโคลงตามคลื่น และเพื่อนในลูกเรือยืนบนดาดฟ้าไปด้วยกันได้ เริ่มจากแพไม้ แล้วไต่ขึ้นไปจนถึงเรือรบลำใหญ่ที่จุคนได้ทั้งลูกเรือ</span><span class="en">Take the helm and cross the open sea between islands. The waves really roll, the ship rides them, and your crew stands on deck with you. Start on a few lashed logs and work your way up to a warship with a full crew on deck.</span></p>
             <ul class="facts"><li>Raft</li><li>Fishing Boat</li><li>Pirate Sloop</li><li>War Galleon</li></ul></div>
         </div>
-        <div class="row">
-          <div class="pic"><img class="shot" src="media/shot-spin-rush.jpg" alt="A player spins forward in a rush of wind." width="1600" height="900" loading="lazy"></div>
-          <div class="txt"><p class="eyebrow"><span class="th">ฝึกให้เก่งขึ้น</span><span class="en">Grow your fighter</span></p><h3><span class="th">สเตตัส สกิล และวิชาเคลื่อนไหว</span><span class="en">Stats, skills and moves</span></h3><p><span class="th">อัปสเตตัสหมัด ดาบ ผลไม้ หรือพลังป้องกันตามสไตล์ของคุณ ฝึก Mastery เพื่อปลดล็อกสกิล Z X C V แล้วเรียนวิชาเคลื่อนไหวอย่างการเดินบนอากาศและการพุ่งแวบหายตัว ทุกคนเกิดมาพร้อมเผ่าที่สุ่มได้ ซึ่งมีความสามารถต่างกัน</span><span class="en">Put points into fists, sword, fruit or defence to match how you fight. Train mastery to unlock your Z, X, C and V skills, then learn moves like sky-walking and the flash step. Everyone starts with a random race, each with its own perks.</span></p>
-            <ul class="facts"><li><span class="th">หมัด + ดาบ Katana</span><span class="en">Fists + Katana</span></li><li><span class="th">4 เผ่า</span><span class="en">4 races</span></li></ul></div>
+        <div class="ships">
+          <article class="ship"><img src="img/ship-raft.jpg" alt="In-game screenshot: the Raft, lashed logs with a patched sail." width="960" height="540" loading="lazy"><div class="txt"><h3>Raft</h3><p class="price">$50</p><p><span class="th">ความเร็ว 32 · จุ 2 คน</span><span class="en">Speed 32 · crew 2</span></p></div></article>
+          <article class="ship"><img src="img/ship-dinghy.jpg" alt="In-game screenshot: the Fishing Boat, a small blue boat with a white sail." width="960" height="540" loading="lazy"><div class="txt"><h3>Fishing Boat</h3><p class="price">$1,500</p><p><span class="th">ความเร็ว 44 · จุ 3 คน</span><span class="en">Speed 44 · crew 3</span></p></div></article>
+          <article class="ship"><img src="img/ship-sloop.jpg" alt="In-game screenshot: the Pirate Sloop, with red sails and shark teeth on the bow." width="960" height="540" loading="lazy"><div class="txt"><h3>Pirate Sloop</h3><p class="price">$8,000</p><p><span class="th">ความเร็ว 56 · จุ 6 คน</span><span class="en">Speed 56 · crew 6</span></p></div></article>
+          <article class="ship"><img src="img/ship-galleon.jpg" alt="In-game screenshot: the War Galleon, a big three-masted red and gold warship." width="960" height="540" loading="lazy"><div class="txt"><h3>War Galleon</h3><p class="price">$50,000</p><p><span class="th">ความเร็ว 50 · จุ 16 คน</span><span class="en">Speed 50 · crew 16</span></p></div></article>
         </div>
+        <div class="row">
+          <div class="pic"><img class="shot" src="media/shot-fire-tornado.jpg" alt="In-game screenshot: a tower of flame and a spinning ring of fire erupt from the arena floor." width="1600" height="900" loading="lazy"></div>
+          <div class="txt"><p class="eyebrow"><span class="th">ฝึกให้เก่งขึ้น</span><span class="en">Grow your fighter</span></p><h3><span class="th">สเตตัส สกิล และวิชาเคลื่อนไหว</span><span class="en">Stats, skills and moves</span></h3><p><span class="th">อัปสเตตัสหมัด ดาบ ผลไม้ หรือพลังป้องกันตามสไตล์ของคุณ ฝึก Mastery เพื่อปลดล็อกสกิล Z X C V แล้วเรียนวิชาเคลื่อนไหวจากครูสอนวิชาที่เมืองป้อมทหารเรือ ทุกคนเกิดมาพร้อมเผ่าที่สุ่มได้ ซึ่งมีความสามารถต่างกัน</span><span class="en">Put points into fists, sword, fruit or defence to match how you fight. Train mastery to unlock your Z, X, C and V skills, then learn new moves from the Abilities Teacher in the navy fortress town. Everyone starts with a random race, each with its own perks.</span></p>
+            <ul class="facts"><li><span class="th">Geppo เดินบนอากาศ $50,000</span><span class="en">Geppo sky-walk $50,000</span></li><li><span class="th">Soru พุ่งแวบ $100,000</span><span class="en">Soru flash step $100,000</span></li><li><span class="th">ฮาคิเกราะ 5 ระดับ</span><span class="en">Armor Haki, 5 levels</span></li><li><span class="th">4 เผ่า</span><span class="en">4 races</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="gear">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">ของในเกม</span><span class="en">In your bag</span></p>
+        <h2><span class="th">อาวุธและของสวมใส่</span><span class="en">Weapons and gear</span></h2>
+        <p class="lede"><span class="th">ไอคอนเดียวกับที่เห็นในกระเป๋าในเกม ของสวมใส่บวกสเตตัสให้ตลอดเวลาที่ใส่อยู่</span><span class="en">The same icons you see in your Bag. Gear adds its stats for as long as you wear it.</span></p>
+      </div>
+      <div class="fruits">
+        <article class="fruit"><img src="fruits/item-combat.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="th">ติดตัวตั้งแต่เริ่ม</span><span class="en">Yours from the start</span></p><h3><span class="th">หมัด</span><span class="en">Combat</span></h3><p><span class="th">หมัดเปล่าที่ทุกคนเริ่มเกมด้วย</span><span class="en">Your own two fists.</span></p></div></article>
+        <article class="fruit"><img src="fruits/item-katana.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar">Common</span> $2,000</p><h3>Katana</h3><p><span class="th">ดาบเล่มแรก ซื้อจาก Shopkeeper ที่หมู่บ้านกังหันลม</span><span class="en">Your first sword, sold by the Shopkeeper in the windmill village.</span></p><ul class="skills"><li><b>Z</b> Slash Wave</li><li><b>X</b> Spin Slash</li></ul></div></article>
+        <article class="fruit is-new"><img src="fruits/item-saber.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar legendary">Legendary</span> <span class="rar fresh"><span class="th">ใหม่</span><span class="en">New</span></span></p><h3>Saber</h3><p><span class="th">ดรอปจาก Saber Boss โอกาส 10%</span><span class="en">A 10% drop from the Saber Boss.</span></p><ul class="skills"><li><b>Z</b> Storm Dash</li><li><b>X</b> Gale Slash</li><li><b>C</b> Tempest Wave</li></ul></div></article>
+        <article class="fruit"><img src="fruits/item-captain-cape.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar rare">Rare</span></p><h3>Captain Cape</h3><p><span class="th">ผลไม้ +15 ป้องกัน +10 ดรอปจาก Bandit Boss โอกาส 15%</span><span class="en">Fruit +15, Defense +10. A 15% drop from the Bandit Boss.</span></p></div></article>
+        <article class="fruit"><img src="fruits/item-bandit-bandana.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar">Common</span></p><h3>Bandit Bandana</h3><p><span class="th">หมัด +10 ป้องกัน +5 ยังไม่ดรอปในเกม</span><span class="en">Melee +10, Defense +5. Not dropping yet.</span></p></div></article>
+        <article class="fruit"><img src="fruits/item-marine-cap.png" alt="" width="240" height="240" loading="lazy"><div><p class="meta"><span class="rar uncommon">Uncommon</span></p><h3>Marine Cap</h3><p><span class="th">ดาบ +10 ป้องกัน +5 ยังไม่ดรอปในเกม</span><span class="en">Sword +10, Defense +5. Not dropping yet.</span></p></div></article>
       </div>
     </div>
   </section>
@@ -431,9 +651,11 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
         <article class="card"><figure><img src="cast/game-haki-warrior.jpg" alt="In-game: a Haki Warrior in a black coat with a katana." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 210</p><h3>Haki Warrior</h3><p><span class="th">นักรบเกาะฮาคิ ชนะ 100 ตัวเพื่อเรียนฮาคิเกราะ</span><span class="en">Warriors of the Haki island. Beat 100 to learn Armor Haki.</span></p></div></article>
         <article class="card"><figure><img src="cast/game-shilder.jpg" alt="In-game: Shilder in golden armour." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 410</p><h3>Shilder</h3><p><span class="th">บอสเกาะ 4 นักสู้ชุดเกราะทอง ผู้นำการบุกภัตตาคารลอยน้ำ</span><span class="en">Island 4 boss in golden armour, leading the raid on the floating restaurant.</span></p></div></article>
         <article class="card"><figure><img src="cast/game-rigel.jpg" alt="In-game: Rigel, a bald fighter with a long black moustache and a dark suit." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 910</p><h3>Rigel</h3><p><span class="th">บอสเกาะ 5 นักสู้พลังควัน ต้องใช้ฮาคิถึงจะตีเข้า</span><span class="en">Island 5 boss with a smoke power. Only Haki can hit him.</span></p></div></article>
-        <article class="card next"><figure><img src="cast/game-saber-boss.jpg" alt="In-game: the Saber Boss, with long white hair and a dark coat." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl"><span class="th">อัปเดตแรก · Lv 850</span><span class="en">Update 1 · Lv 850</span></p><h3>Saber Boss</h3><p><span class="th">บอสปลายเกม เรียกออกมาด้วยไอเท็มจาก Elite ดรอปดาบ Saber</span><span class="en">The end-game duelist, summoned with an item Elites drop. Drops the Saber.</span></p></div></article>
+        <article class="card next"><figure><img src="cast/game-saber-boss.jpg" alt="In-game: the Saber Boss, with spiky white hair, a dark coat and a blue saber, under storm clouds." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl"><span class="th">ใหม่ · Lv 950</span><span class="en">New · Lv 950</span></p><h3>Saber Boss</h3><p><span class="th">บอสปลายเกมบนเกาะ Saber ปลุกได้ที่ผู้เรียกบอส เลือด 596,250 ดรอปดาบ Saber 10%</span><span class="en">The end-game duelist on Saber Island, woken at the Boss Summoner. 596,250 HP and a 10% Saber drop.</span></p></div></article>
+        <article class="card next"><figure><img src="cast/game-frost-warden.jpg" alt="In-game: Frost Warden, an Elite with white hair, a blue top and a katana." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl"><span class="th">ใหม่ · เลเวลตามเกาะ</span><span class="en">New · level by island</span></p><h3>Frost Warden</h3><p><span class="th">Elite ผลน้ำแข็ง ต้องใช้ฮาคิถึงจะตีเข้า และกาง Ice Age ใส่คุณได้</span><span class="en">The Ice Elite. Only Haki can hit it, and it can throw Ice Age down on you.</span></p></div></article>
+        <article class="card next"><figure><img src="cast/game-sea-hunter.jpg" alt="In-game: a Sea Hunter's sloop with shark teeth on the bow, sailing the open sea." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl"><span class="th">ใหม่ · Lv 50–1000</span><span class="en">New · Lv 50–1000</span></p><h3>Sea Hunter</h3><p><span class="th">เรือนักล่าเป็นกลางกลางทะเล ไม่ยุ่งจนกว่าจะโดนตีก่อน</span><span class="en">Neutral hunter ships at sea that leave you alone until you hit first.</span></p></div></article>
         <article class="card"><figure><img src="cast/game-bounty-hunter.jpg" alt="In-game: a bounty hunter with a katana on the deck of a black-sailed ship." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 100–1000</p><h3>Bounty Hunter</h3><p><span class="th">ขับเรือมาล่าผู้เล่นที่ค่าหัวหรือเกียรติยศสูงเกินไป ค่าหัวคุณยิ่งสูง ยิ่งเก่ง</span><span class="en">Sails in for players whose Bounty or Honor got too high, and gets stronger as yours grows.</span></p></div></article>
-        <article class="card"><figure><img src="cast/game-elites.jpg" alt="In-game: three of the five Elites standing in the windmill village." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 25–500</p><h3>Elites</h3><p><span class="th">5 ตัว 5 ผลไม้ โผล่เป็นอีเวนต์ เลเวลตามเกาะ</span><span class="en">Five of them, one per fruit. Event spawns, level by island.</span></p></div></article>
+        <article class="card"><figure><img src="cast/game-elites.jpg" alt="In-game: three of the six Elites standing in the windmill village." width="600" height="800" loading="lazy"></figure><div class="txt"><p class="lvl">Lv 25–500</p><h3>Elites</h3><p><span class="th">6 ตัว 6 ผลไม้ โผล่เป็นอีเวนต์ เลเวลตามเกาะ</span><span class="en">Six of them, one per fruit. Event spawns, level by island.</span></p></div></article>
       </div>
     </div>
   </section>
@@ -443,15 +665,18 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
       <div class="head">
         <p class="eyebrow"><span class="th">ภาพจากในเกม</span><span class="en">In the game</span></p>
         <h2><span class="th">ภาพจริงจากในเกม</span><span class="en">Straight from the game</span></h2>
-        <p class="lede"><span class="th">ภาพหน้าจอจากเวอร์ชันที่กำลังพัฒนา ไม่ได้ตกแต่ง มีแต่การต่อสู้ล้วนๆ</span><span class="en">Screenshots from current builds. No edits, just the fight.</span></p>
+        <p class="lede"><span class="th">ภาพหน้าจอจากเวอร์ชันล่าสุด ไม่ได้ตกแต่ง เห็นตัวเลขดาเมจกับคอมโบของจริงในภาพ</span><span class="en">Screenshots from the latest build. No edits, with the real damage numbers and combo counter still on screen.</span></p>
       </div>
       <div class="shots">
-        <figure><img src="media/shot-flame-burst.jpg" alt="A flame burst erupts in the village." width="1600" height="900" loading="lazy"><figcaption><span class="th">ระเบิดเพลิง</span><span class="en">Flame burst</span></figcaption></figure>
-        <figure><img src="media/shot-explosion.jpg" alt="An explosion hits a group of enemies." width="1600" height="900" loading="lazy"><figcaption><span class="th">ระเบิดกลางหมู่บ้าน</span><span class="en">Blast in the village</span></figcaption></figure>
-        <figure><img src="media/shot-meteor.jpg" alt="A fiery meteor crashes into the field and throws up chunks of ground." width="1600" height="900" loading="lazy"><figcaption><span class="th">อุกกาบาตไฟ</span><span class="en">Meteor drop</span></figcaption></figure>
-        <figure><img src="media/shot-fire-fist.jpg" alt="A fire fist explodes against an enemy." width="1600" height="900" loading="lazy"><figcaption><span class="th">หมัดเพลิง</span><span class="en">Fire fist</span></figcaption></figure>
-        <figure><img src="media/shot-storm-meteor.jpg" alt="A whirlwind meets a falling meteor." width="1600" height="900" loading="lazy"><figcaption><span class="th">พายุปะทะไฟ</span><span class="en">Storm and fire</span></figcaption></figure>
-        <figure><img src="media/shot-sea-sail.jpg" alt="Standing at the mast of a ship under full sail." width="1600" height="900" loading="lazy"><figcaption><span class="th">กางใบออกทะเล</span><span class="en">Under sail</span></figcaption></figure>
+        <figure><img src="img/game-ice-age.jpg" alt="Ice spikes rise all around a frozen arena while a small player runs across the ice." width="1600" height="900" loading="lazy"><figcaption><span class="th">Ice Age แช่แข็งทั้งลานประลอง</span><span class="en">Ice Age freezes the arena</span></figcaption></figure>
+        <figure><img src="media/shot-saber-swirl.jpg" alt="The Saber Boss swings through a storm of white and red slashes, 25 hits on the counter." width="1600" height="900" loading="lazy"><figcaption><span class="th">ดวล Saber Boss</span><span class="en">Dueling the Saber Boss</span></figcaption></figure>
+        <figure><img src="img/game-ice-walk.jpg" alt="A player runs across the open sea on a trail of ice floes." width="1600" height="900" loading="lazy"><figcaption><span class="th">เดินบนทะเลด้วยผลน้ำแข็ง</span><span class="en">Walking on the sea</span></figcaption></figure>
+        <figure><img src="media/shot-flame-circle.jpg" alt="A huge ring of flame fills the screen." width="1600" height="900" loading="lazy"><figcaption><span class="th">วงแหวนเพลิง</span><span class="en">Ring of flame</span></figcaption></figure>
+        <figure><img src="media/shot-red-vortex.jpg" alt="A red vortex with white slashes spins around the Saber Boss's blade." width="1600" height="900" loading="lazy"><figcaption><span class="th">สกิล Saber</span><span class="en">A Saber skill</span></figcaption></figure>
+        <figure><img src="media/shot-flame-wall.jpg" alt="A wall of flame rises behind a fighter on the broken arena floor." width="1600" height="900" loading="lazy"><figcaption><span class="th">กำแพงเพลิง</span><span class="en">Wall of flame</span></figcaption></figure>
+        <figure><img src="media/shot-fire-sun.jpg" alt="A round blast of fire like a small sun." width="1600" height="900" loading="lazy"><figcaption><span class="th">ระเบิดเพลิง</span><span class="en">Fire blast</span></figcaption></figure>
+        <figure><img src="media/shot-climax.jpg" alt="Flames and black ink spikes erupt around two fighters." width="1600" height="900" loading="lazy"><figcaption><span class="th">เพลิงปะทะ Saber</span><span class="en">Flame against Saber</span></figcaption></figure>
+        <figure><img src="img/ship-galleon.jpg" alt="A three-masted war galleon on bright blue water." width="960" height="540" loading="lazy"><figcaption><span class="th">War Galleon กางใบ</span><span class="en">War Galleon under sail</span></figcaption></figure>
       </div>
     </div>
   </section>
@@ -464,36 +689,47 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
         <p class="lede"><span class="th">Fruit Piece อยู่ในแนวเกมต่อสู้พลังผลไม้สไตล์อนิเมะ ซึ่งเป็นหนึ่งในแนวที่คนเล่นเยอะที่สุดบน Roblox ระบบหลักทั้งหมดด้านล่างนี้สร้างเสร็จและทดสอบในเกมแล้ว</span><span class="en">Fruit Piece plays in the anime fruit-fighting genre, one of the most played on Roblox. Every core system below is built and tested in the game.</span></p>
       </div>
       <ul class="built">
-        <li><span class="tick">✓</span><div><b><span class="th">6 เกาะ เลเวล 1–1000</span><span class="en">6 islands, levels 1–1000</span></b><span class="d"><span class="th">เควสทุกเกาะ มอนเก่งกว่าเลเวลเควสเล็กน้อยให้ท้าทาย</span><span class="en">Quests on every island; monsters sit a little above the quest level to keep it a challenge.</span></span></div></li>
-        <li><span class="tick">✓</span><div><b><span class="th">ระบบต่อสู้แบบผู้เล่น</span><span class="en">Player-style combat</span></b><span class="d"><span class="th">คอมโบหมัด ดาบ 5 ผลไม้ สกิลปลดล็อกตาม Mastery</span><span class="en">Fist and sword combos, 5 fruits, skills that unlock with mastery.</span></span></div></li>
-        <li><span class="tick">✓</span><div><b><span class="th">บอส 5 ตัว + Elite 5 ตัว</span><span class="en">5 bosses + 5 Elites</span></b><span class="d"><span class="th">AI ที่ใช้สกิล Dash Geppo Soru และฮาคิเหมือนผู้เล่น</span><span class="en">AI that uses skills, dashes, air jumps, flash steps and Haki like a player.</span></span></div></li>
-        <li><span class="tick">✓</span><div><b><span class="th">PvP + ค่าหัว + นักล่า</span><span class="en">PvP, bounties and hunters</span></b><span class="d"><span class="th">2 ฝ่าย ค่าหัว/เกียรติยศ นักล่าขับเรือมาไล่ล่า 4 ระดับ</span><span class="en">Two sides, Bounty and Honor, hunters who arrive by ship in 4 tiers.</span></span></div></li>
-        <li><span class="tick">✓</span><div><b><span class="th">เรือและทะเล</span><span class="en">Ships and sea</span></b><span class="d"><span class="th">เรือ 4 แบบ ยืนขับได้ คลื่นทะเลจริง ลูกเรือยืนบนดาดฟ้าได้</span><span class="en">4 ships with a standing helm, rolling waves and crew riding on deck.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">7 เกาะ เลเวล 1–1000</span><span class="en">7 islands, levels 1–1000</span></b><span class="d"><span class="th">เควสทุกเกาะ มอนเก่งกว่าเลเวลเควสเล็กน้อยให้ท้าทาย</span><span class="en">Quests on every island; monsters sit a little above the quest level to keep it a challenge.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">ระบบต่อสู้แบบผู้เล่น</span><span class="en">Player-style combat</span></b><span class="d"><span class="th">คอมโบหมัด ดาบ Katana และ Saber 6 ผลไม้ สกิลปลดล็อกตาม Mastery</span><span class="en">Fist, Katana and Saber combos, 6 fruits, skills that unlock with mastery.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">บอส 6 ตัว + Elite 6 ตัว</span><span class="en">6 bosses + 6 Elites</span></b><span class="d"><span class="th">AI ที่ใช้สกิล Dash Geppo Soru และฮาคิเหมือนผู้เล่น รางวัลบอสแชร์กันเมื่อตีถึง 10%</span><span class="en">AI that uses skills, dashes, air jumps, flash steps and Haki like a player. Boss rewards are shared at 10% damage.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">PvP + ค่าหัว + นักล่า 2 แบบ</span><span class="en">PvP, bounties and two kinds of hunter</span></b><span class="d"><span class="th">2 ฝ่าย ค่าหัว/เกียรติยศ นักล่าค่าหัวขับเรือมาไล่ล่า 4 ระดับ และ Sea Hunter กลางทะเล 4 ระดับ</span><span class="en">Two sides, Bounty and Honor, bounty hunters arriving by ship in 4 tiers and Sea Hunters at sea in 4 tiers.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">เรือ ทะเล และสภาพอากาศ</span><span class="en">Ships, sea and weather</span></b><span class="d"><span class="th">เรือ 4 แบบ ยืนขับได้ คลื่นจริง ลูกเรือยืนบนดาดฟ้าได้ ฝนและพายุสุ่มทั่วแผนที่</span><span class="en">4 ships with a standing helm, real waves, crew riding on deck, and random rain and storms across the map.</span></span></div></li>
         <li><span class="tick">✓</span><div><b><span class="th">ระบบสังคม</span><span class="en">Social systems</span></b><span class="d"><span class="th">กิลด์ พันธมิตร 4 เผ่า และของดรอปจากบอส</span><span class="en">Guilds, allies, 4 races and gear drops from bosses.</span></span></div></li>
-        <li><span class="tick">✓</span><div><b><span class="th">AI ศัตรูทดสอบครบทุกเกาะ</span><span class="en">Enemy AI tested on every island</span></b><span class="d"><span class="th">ถึงตัวผู้เล่น 89 จาก 89 จุดทดสอบ ใช้แรงเซิร์ฟเวอร์ไม่ถึง 0.1 ms ต่อเฟรม</span><span class="en">Reached the player at 89 of 89 test spots, using under 0.1 ms of server time a frame.</span></span></div></li>
-        <li><span class="tick">✓</span><div><b><span class="th">เสียงและบรรยากาศ</span><span class="en">Sound and atmosphere</span></b><span class="d"><span class="th">เพลงประจำเกาะ เสียงคลื่นกลางทะเล และเสียงฝีเท้าตามพื้นผิว</span><span class="en">Island music, sea waves out on the water and footsteps that change with the ground.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">หน้าจอและร้านค้าครบ</span><span class="en">A full interface and shop</span></b><span class="d"><span class="th">UI ลายเส้นพู่กันทุกหน้าจอ ร้าน Game Pass และไอเทมพร้อมต่อกับ Robux</span><span class="en">A brush-ink interface on every screen, plus a Game Pass and item shop ready for Robux.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">AI ศัตรูทดสอบครบทุกเกาะ</span><span class="en">Enemy AI tested on every island</span></b><span class="d"><span class="th">รอบทดสอบ 26 ต.ค. ถึงตัวผู้เล่น 89 จาก 89 จุด ใช้แรงเซิร์ฟเวอร์ไม่ถึง 0.1 ms ต่อเฟรม</span><span class="en">In the 26 Oct test round it reached the player at 89 of 89 spots, using under 0.1 ms of server time a frame.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">เสียงและบรรยากาศ</span><span class="en">Sound and atmosphere</span></b><span class="d"><span class="th">เพลงประจำเกาะ เพลงบอส เสียงคลื่น ฝน ฟ้าร้อง และเสียงฝีเท้าตามพื้นผิว</span><span class="en">Island and boss music, sea waves, rain, thunder and footsteps that change with the ground.</span></span></div></li>
         <li><span class="tick">✓</span><div><b><span class="th">ระบบตรวจจับการโกง</span><span class="en">Cheat watcher</span></b><span class="d"><span class="th">เซิร์ฟเวอร์ตรวจความเร็ว การบิน และการวาร์ปที่ผิดปกติ</span><span class="en">The server watches for speed, flying and teleport hacks.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">รันยาวไม่สะดุด</span><span class="en">Long runs hold up</span></b><span class="d"><span class="th">ทดสอบรันต่อเนื่อง 40 นาที ไม่มี error และหน่วยความจำคงที่</span><span class="en">A 40-minute soak test ran with no errors and flat memory.</span></span></div></li>
+        <li><span class="tick">✓</span><div><b><span class="th">ผู้ทดสอบเริ่มเข้าเล่น</span><span class="en">Testers are in</span></b><span class="d"><span class="th">เปิดเวอร์ชันทดสอบบน Roblox ให้ผู้ทดสอบเล่นแล้ว และแก้ปัญหาตามที่พวกเขาแจ้ง</span><span class="en">The test build is up on Roblox for testers, and problems they report are getting fixed.</span></span></div></li>
       </ul>
 
       <h3 class="sub"><span class="th">เส้นทางพัฒนาต่อ</span><span class="en">What comes next</span></h3>
       <ol class="road">
-        <li class="done"><span class="when"><span class="th">ตอนนี้</span><span class="en">Now</span></span><h4><span class="th">เกมหลักครบ</span><span class="en">Core game built</span></h4><p><span class="th">6 เกาะ เลเวล 1–1000 บอส Elite นักล่า เรือ และ PvP เล่นได้แล้วในเวอร์ชันทดสอบ</span><span class="en">6 islands, levels 1–1000, bosses, Elites, hunters, ships and PvP, playable in the test build.</span></p></li>
+        <li class="done"><span class="when"><span class="th">ตอนนี้</span><span class="en">Now</span></span><h4><span class="th">เกมหลักครบ</span><span class="en">Core game built</span></h4><p><span class="th">7 เกาะ เลเวล 1–1000 บอสปลายเกม Elite นักล่า 2 แบบ เรือ สภาพอากาศ และ PvP เล่นได้แล้วในเวอร์ชันทดสอบ</span><span class="en">7 islands, levels 1–1000, an end-game boss, Elites, two kinds of hunter, ships, weather and PvP, playable in the test build.</span></p></li>
         <li><span class="when"><span class="th">เปิดเกม</span><span class="en">Launch</span></span><h4><span class="th">เปิดให้เล่นจริง</span><span class="en">Open to players</span></h4><p><span class="th">เกลาหน้าจอและปุ่มบนมือถือให้เรียบร้อย เปิดระบบเซฟ ปิดเครื่องมือทดสอบ และเปิดสินค้า Robux ที่เตรียมไว้</span><span class="en">Phone screens and buttons polished, saving on, test tools off and the prepared Robux products switched on.</span></p></li>
-        <li><span class="when"><span class="th">อัปเดต 1</span><span class="en">Update 1</span></span><h4><span class="th">ปลายเกม</span><span class="en">End game</span></h4><p><span class="th">บอส Saber Lv 850 สไตล์เตะ Black Leg และเกาะฝึกวิชาเคลื่อนไหว</span><span class="en">The Lv 850 Saber Boss, the Black Leg kicking style and a training island for movement skills.</span></p></li>
+        <li><span class="when"><span class="th">อัปเดต 1</span><span class="en">Update 1</span></span><h4><span class="th">สไตล์ใหม่</span><span class="en">New styles</span></h4><p><span class="th">สไตล์เตะ Black Leg และเกาะฝึกวิชาเคลื่อนไหว</span><span class="en">The Black Leg kicking style and a training island for movement skills.</span></p></li>
         <li><span class="when"><span class="th">ถัดไป</span><span class="en">After that</span></span><h4><span class="th">ศึกกลางทะเล</span><span class="en">Sea battles</span></h4><p><span class="th">เรือมีเลือด ปืนใหญ่ และสัตว์ประหลาดเจ้าทะเล พร้อมขยายเลเวลสูงสุด</span><span class="en">Ship health, cannons and sea beasts, then a higher level cap.</span></p></li>
       </ol>
 
       <div class="split" style="margin-top: clamp(44px, 6vw, 72px);">
         <div class="panel">
           <p class="eyebrow"><span class="th">รูปแบบรายได้</span><span class="en">How it earns</span></p>
-          <h3><span class="th">สินค้า Robux ที่ซื้อซ้ำได้</span><span class="en">Repeatable Robux products</span></h3>
-          <ul>
-            <li><span class="pill ready"><span class="th">พร้อม</span><span class="en">Ready</span></span><span><b><span class="th">รีเซ็ตสเตตัส</span><span class="en">Stat reset</span></b> <span class="th">ลองบิลด์ใหม่ได้ไม่ต้องเริ่มเกมใหม่</span><span class="en">try a new build without starting over</span></span></li>
-            <li><span class="pill ready"><span class="th">พร้อม</span><span class="en">Ready</span></span><span><b><span class="th">ลบผลไม้</span><span class="en">Fruit removal</span></b> <span class="th">เปลี่ยนพลังผลไม้ได้ทันที</span><span class="en">swap to a new fruit power</span></span></li>
-            <li><span class="pill ready"><span class="th">พร้อม</span><span class="en">Ready</span></span><span><b><span class="th">เรียกบอสเกิดใหม่</span><span class="en">Boss respawn</span></b> <span class="th">ทั้งเซิร์ฟได้ลุ้นบอสพร้อมกัน</span><span class="en">brings every island boss back for the whole server</span></span></li>
-            <li><span class="pill plan"><span class="th">วางแผน</span><span class="en">Planned</span></span><span><b><span class="th">สุ่มเผ่าใหม่</span><span class="en">Race reroll</span></b> <span class="th">ลุ้นเผ่าที่ชอบ</span><span class="en">roll for a different race</span></span></li>
+          <h3><span class="th">Game Pass 6 แบบ + ไอเทมซื้อซ้ำ</span><span class="en">6 Game Passes + repeatable items</span></h3>
+          <ul class="store" aria-label="Game Passes">
+            <li><img src="fruits/store-exp.png" alt="" width="160" height="160" loading="lazy"><span><b>2X EXP</b><span class="th">เลเวลขึ้นเร็ว 2 เท่า</span><span class="en">Level up twice as fast</span></span></li>
+            <li><img src="fruits/store-gold.png" alt="" width="160" height="160" loading="lazy"><span><b>2X MONEY</b><span class="th">เงินจากการสู้และเควส 2 เท่า</span><span class="en">Double money from fights and quests</span></span></li>
+            <li><img src="fruits/store-mastery.png" alt="" width="160" height="160" loading="lazy"><span><b>2X MASTERY</b><span class="th">ฝึกผลไม้และอาวุธเร็ว 2 เท่า</span><span class="en">Master fruits and weapons twice as fast</span></span></li>
+            <li><img src="fruits/store-finder.png" alt="" width="160" height="160" loading="lazy"><span><b>FRUIT FINDER</b><span class="th">รู้ว่าผลไม้เกิดที่เกาะไหน</span><span class="en">Know which island a fruit spawns on</span></span></li>
+            <li><img src="fruits/store-lucky.png" alt="" width="160" height="160" loading="lazy"><span><b>LUCKY DROPS</b><span class="th">โอกาสดรอปจากบอส 2 เท่า</span><span class="en">Double the chance of boss drops</span></span></li>
+            <li><img src="fruits/store-sail.png" alt="" width="160" height="160" loading="lazy"><span><b>FAST SAILING</b><span class="th">เรือที่คุณขับเร็วขึ้น 50%</span><span class="en">Ships you steer sail 50% faster</span></span></li>
           </ul>
-          <p class="lede" style="font-size: .93rem;"><span class="th">สินค้าทั้งหมดสร้างไว้ในเกมแล้ว เปิดขายได้ทันทีด้วยการใส่รหัสสินค้าเพียงค่าเดียว</span><span class="en">All of these are already in the game; each goes on sale by setting one product id.</span></p>
+          <ul class="store" aria-label="Items">
+            <li><img src="fruits/store-reset.png" alt="" width="160" height="160" loading="lazy"><span><b><span class="th">รีเซ็ตสเตตัส</span><span class="en">Stat reset</span></b><span class="th">ลองบิลด์ใหม่ไม่ต้องเริ่มเกมใหม่</span><span class="en">Try a new build without starting over</span></span></li>
+            <li><img src="fruits/store-remove.png" alt="" width="160" height="160" loading="lazy"><span><b><span class="th">ลบผลไม้</span><span class="en">Remove fruit</span></b><span class="th">ทิ้งพลังเดิมเพื่อกินผลใหม่</span><span class="en">Lose your power to eat a new fruit</span></span></li>
+            <li><img src="fruits/store-boss.png" alt="" width="160" height="160" loading="lazy"><span><b><span class="th">เรียกบอสเกิดใหม่</span><span class="en">Respawn bosses</span></b><span class="th">ทั้งเซิร์ฟได้ลุ้นบอสพร้อมกัน</span><span class="en">Brings every island boss back for the server</span></span></li>
+            <li><img src="fruits/store-race.png" alt="" width="160" height="160" loading="lazy"><span><b><span class="th">สุ่มเผ่าใหม่</span><span class="en">Race reroll</span></b><span class="th">ยังอยู่ในแผน</span><span class="en">Still planned</span></span></li>
+          </ul>
+          <p class="lede" style="font-size: .93rem;"><span class="th">นอกจากนี้ยังมีผลไม้แบบถาวรที่ร้าน Fruit Dealer ทุกอย่างสร้างไว้ในเกมแล้วแต่ยังไม่เปิดขาย แต่ละชิ้นเปิดขายได้ด้วยการใส่รหัสสินค้าค่าเดียว</span><span class="en">There are also permanent fruits at the Fruit Dealer. All of it is in the game but not on sale yet, and each one goes on sale by setting one product id.</span></p>
         </div>
         <div class="panel">
           <p class="eyebrow"><span class="th">ปลอดภัยสำหรับเด็ก</span><span class="en">Made for kids</span></p>
