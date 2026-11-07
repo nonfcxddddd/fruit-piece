@@ -189,6 +189,46 @@ kbd { display: inline-grid; place-items: center; min-width: 32px; height: 32px; 
 .guide .panel li::before { content: ""; width: 6px; height: 6px; margin-top: .6em; border-radius: 50%; background: var(--gold); }
 .settings-row { margin-top: 14px; }
 
+/* ---------- play with the page: one canvas for every burst and the pointer glow, tilting cards, magnetic buttons,
+   Z X C V mini skills, sections that slide up as they arrive (transform only, never opacity) ---------- */
+#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+.fruit { --el: 255,186,74; position: relative; }
+.fruit[data-el="flame"] { --el: 255,122,61; }
+.fruit[data-el="ice"] { --el: 143,216,255; }
+.fruit[data-el="light"] { --el: 255,226,122; }
+.fruit[data-el="gravity"] { --el: 176,124,255; }
+.fruit[data-el="suke"] { --el: 201,230,255; }
+.fruit[data-el="spin"] { --el: 139,227,181; }
+.fruit[data-el="smoke"] { --el: 199,190,221; }
+.fruit[data-el="bomb"] { --el: 255,122,77; }
+.tilt { position: relative; }
+.tilt::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .25s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(255,241,196,.17), transparent 62%); }
+.tilt.hot::after { opacity: 1; }
+html.fx-fine .fruit:hover { border-color: rgba(var(--el), .75); box-shadow: 0 0 0 1px rgba(var(--el), .35), 0 18px 46px -16px rgba(var(--el), .8); }
+html.fx-fine .fruit img { transition: transform .4s cubic-bezier(.3,1.6,.5,1); }
+html.fx-fine .fruit:hover img { transform: scale(1.15) rotate(-12deg); }
+.btn { position: relative; overflow: hidden; }
+html.fx-fine .btn { transition: transform .18s ease-out, filter .2s, border-color .2s; }
+.rip { position: absolute; border-radius: 50%; pointer-events: none; background: rgba(255,255,255,.42); transform: translate(-50%, -50%) scale(0); animation: rip .55s ease-out forwards; }
+@keyframes rip { to { transform: translate(-50%, -50%) scale(1); opacity: 0; } }
+.rv { transform: translateY(26px); transition: transform .75s cubic-bezier(.2,.8,.2,1) var(--d, 0ms), border-color .2s, box-shadow .25s; }
+.rv.in { transform: none; }
+.key-hint { display: none; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .key-hint { display: inline-flex; align-items: center; gap: 6px; justify-self: start; font-size: .85rem; color: var(--mist); padding: 6px 12px; border-radius: 999px; background: rgba(11,18,32,.72); border: 1px dashed rgba(255,213,105,.45); text-shadow: none; }
+  .key-hint kbd { min-width: 26px; height: 26px; padding: 0 6px; font-size: .74rem; border-bottom-width: 2px; }
+}
+kbd.lit { background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: var(--tar); border-color: var(--gold-hi); box-shadow: 0 0 22px rgba(255,186,74,.8); }
+html.fx-par .hero-art { transform: scale(1.04); transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+html.fx-par .hero-fruits { transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+html.fx-par .hero-copy { pointer-events: none; }
+html.fx-par .hero-copy > * { pointer-events: auto; }
+html.fx-par .hero-fruits .f { pointer-events: auto; cursor: pointer; }
+.hero-fruits .f img { transition: transform .5s cubic-bezier(.3,1.6,.5,1); }
+.hero-fruits .f.popped img { transform: scale(0); transition: transform .14s ease-in; }
+@media (prefers-reduced-motion: reduce) { .rv { transform: none; } .rip { display: none; } }
+
 /* ---------- trailer ---------- */
 .trailer { display: grid; gap: 28px; align-items: center; }
 .trailer video { width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); border: 1px solid var(--rope); background: #000; box-shadow: 0 30px 80px -30px rgba(240,102,46,.45); }
@@ -443,6 +483,7 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
       <a class="btn btn-ghost" href="#trailer"><span class="th">ดูเทรลเลอร์</span><span class="en">Watch the trailer</span></a>
       <span class="soon"><b><span class="th">เร็วๆ นี้</span><span class="en">Coming soon</span></b> <span class="th">บน Roblox</span><span class="en">to Roblox</span></span>
     </div>
+    <p class="key-hint"><span class="th">ลองกด</span><span class="en">Try pressing</span> <kbd>Z</kbd><kbd>X</kbd><kbd>C</kbd><kbd>V</kbd> <span class="th">หรือคลิกผลไม้</span><span class="en">or click a fruit</span></p>
   </div>
 </header>
 
@@ -1051,6 +1092,305 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
+  })();
+</script>
+<script>
+  // Play with the page: click bursts in the four fruit colours, a gold pointer glow, tilting cards, magnetic buttons,
+  // hero parallax with fruits you can pop, Z X C V mini skills, and sections that slide up as they arrive.
+  // One canvas for every particle, drawn only while something is moving. All of it is off for reduced motion.
+  (function () {
+    if (!window.matchMedia || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+    var root = document.documentElement;
+    if (fine) { root.classList.add("fx-fine"); root.classList.add("fx-par"); }
+
+    var canvas = document.createElement("canvas");
+    canvas.id = "fx"; canvas.setAttribute("aria-hidden", "true");
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    var W = 0, H = 0;
+    function size() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth; H = window.innerHeight;
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size();
+    window.addEventListener("resize", size);
+
+    var PAL = {
+      flame: ["#FF5A1F", "#FF9A3D", "#FFD27A"],
+      ice: ["#6FC8FF", "#CFF1FF", "#FFFFFF"],
+      light: ["#FFD23F", "#FFF2B0", "#FFFFFF"],
+      gravity: ["#9A5CFF", "#C9A6FF", "#6B2BFF"]
+    };
+    var ORDER = ["flame", "ice", "light", "gravity"], clicks = 0;
+    var parts = [], MAX = 420, running = false, last = 0;
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function pick(list) { return list[(Math.random() * list.length) | 0]; }
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    function easeBack(t) { var c = 1.9; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2); }
+    function add(p) { if (parts.length >= MAX) return null; p.life = -(p.delay || 0); parts.push(p); wake(); return p; }
+    function wake() { if (!running) { running = true; last = 0; requestAnimationFrame(frame); } }
+
+    // ---- the pieces every effect is made of ----
+    function dot(x, y, vx, vy, c, r, max, g, drag) { return add({ k: "dot", x: x, y: y, vx: vx, vy: vy, c: c, r: r, max: max, g: g || 0, drag: drag || 0 }); }
+    function ring(x, y, r0, r1, w, c, max, delay) { return add({ k: "ring", x: x, y: y, r0: r0, r1: r1, w: w, c: c, max: max, delay: delay }); }
+    function ray(x, y, a, ri, ro, w, c, max, delay) { return add({ k: "ray", x: x, y: y, a: a, ri: ri, ro: ro, w: w, c: c, max: max, delay: delay }); }
+    function shard(x, y, vx, vy, s, c, max, g) { return add({ k: "shard", x: x, y: y, vx: vx, vy: vy, s: s, c: c, max: max, g: g || 0, rot: rnd(0, 6.28), vr: rnd(-9, 9) }); }
+
+    // a click: an impact ring, a starburst and a spray of sparks in one fruit's colours
+    function burst(x, y, el, s) {
+      var c = PAL[el];
+      ring(x, y, 4 * s, 46 * s, 5 * s, c[0], 0.42);
+      ring(x, y, 2 * s, 26 * s, 3 * s, c[2], 0.3);
+      var n = 8;
+      for (var i = 0; i < n; i++) ray(x, y, i / n * 6.283 + rnd(-0.2, 0.2), 6 * s, rnd(26, 40) * s, 3 * s, c[1], 0.28);
+      var m = Math.round(10 * s);
+      for (var j = 0; j < m; j++) { var b = rnd(0, 6.283), sp = rnd(120, 320) * s; dot(x, y, Math.cos(b) * sp, Math.sin(b) * sp - 60 * s, pick(c), rnd(1.5, 3.2) * s, rnd(0.35, 0.6), 520, 2.2); }
+    }
+    // a floating fruit popped: its own element on top of the burst
+    function elementBurst(x, y, el) {
+      var c = PAL[el], i, a;
+      burst(x, y, el, 1.3);
+      if (el === "flame") for (i = 0; i < 20; i++) dot(x + rnd(-14, 14), y + rnd(-10, 10), rnd(-80, 80), rnd(-260, -80), pick(c), rnd(2, 4.2), rnd(0.6, 1.1), -60, 1.4);
+      if (el === "ice") for (i = 0; i < 14; i++) { a = rnd(0, 6.283); shard(x, y, Math.cos(a) * rnd(160, 360), Math.sin(a) * rnd(160, 360), rnd(5, 9), pick(c), rnd(0.5, 0.8), 380); }
+      if (el === "light") for (i = 0; i < 16; i++) ray(x, y, i / 16 * 6.283, 18, rnd(90, 150), 2.6, pick(c), 0.5);
+      if (el === "gravity") {
+        ring(x, y, 90, 6, 5, c[1], 0.45);
+        ring(x, y, 4, 120, 6, c[0], 0.5, 0.42);
+        for (i = 0; i < 16; i++) { a = i / 16 * 6.283; dot(x + Math.cos(a) * 95, y + Math.sin(a) * 95, -Math.cos(a) * 200, -Math.sin(a) * 200, pick(c), 2.6, 0.45); }
+      }
+    }
+    // something that flies from one point to another, leaving a trail, then lands with end()
+    function mover(sx, sy, ex, ey, max, el, r, end, ease) {
+      return add({ k: "mover", sx: sx, sy: sy, ex: ex, ey: ey, x: sx, y: sy, max: max, el: el, r: r, end: end, ease: ease });
+    }
+
+    // ---- Z X C V: the four fruits' skills, near the pointer ----
+    var pointer = { x: 0, y: 0, hot: false, last: -1e9, seen: false };
+    function skill(key) {
+      var px = pointer.seen ? pointer.x : W / 2, py = pointer.seen ? pointer.y : H / 2, i;
+      if (key === "z") { // Flame: a fist of fire streaking across
+        mover(px - 300, py + 12, px + 90, py, 0.32, "flame", 11, function (p) {
+          burst(p.ex, p.ey, "flame", 1.4);
+          for (var j = 0; j < 14; j++) dot(p.ex, p.ey, rnd(40, 260), rnd(-180, 120), pick(PAL.flame), rnd(2, 4), rnd(0.4, 0.8), 200, 1.6);
+        });
+      } else if (key === "x") { // Ice: spikes bursting up out of the ground
+        for (i = 0; i < 7; i++) {
+          var sx = px - 130 + i * 43 + rnd(-8, 8), h = rnd(50, 120) * (1 - Math.abs(i - 3) * 0.12);
+          add({ k: "spike", x: sx, y: py + 46, h: h, w: rnd(16, 26), c: pick(["#6FC8FF", "#9BDDFF"]), max: 0.8, delay: Math.abs(i - 3) * 0.04 });
+          for (var j = 0; j < 3; j++) shard(sx, py + 46 - h * 0.8, rnd(-120, 120), rnd(-260, -80), rnd(3, 6), pick(PAL.ice), rnd(0.4, 0.7), 520);
+        }
+        ring(px, py + 46, 6, 150, 4, "#CFF1FF", 0.45);
+      } else if (key === "c") { // Light: a beam slash through the pointer
+        add({ k: "beam", x1: px - 340, y1: py + 140, x2: px + 340, y2: py - 140, w: 16, c: "#FFD23F", c2: "#FFFFFF", max: 0.55 });
+        for (i = 0; i < 14; i++) ray(px, py, i / 14 * 6.283, 10, rnd(60, 110), 2.2, pick(PAL.light), 0.4, 0.05);
+        for (i = 0; i < 22; i++) { var t = Math.random(); dot(px - 340 + 680 * t, py + 140 - 280 * t, rnd(-60, 60), rnd(-60, 60), pick(PAL.light), rnd(1.5, 3), rnd(0.3, 0.6)); }
+      } else if (key === "v") { // Gravity: a meteor dropping, a ring where it lands
+        mover(px + 300, py - 460, px, py, 0.5, "gravity", 13, function (p) {
+          ring(p.ex, p.ey, 6, 120, 8, "#9A5CFF", 0.55);
+          ring(p.ex, p.ey, 4, 70, 5, "#E2C8FF", 0.45, 0.08);
+          for (var j = 0; j < 16; j++) { var a = rnd(3.3, 6.1); shard(p.ex, p.ey, Math.cos(a) * rnd(140, 340), Math.sin(a) * rnd(140, 340), rnd(4, 8), pick(PAL.gravity), rnd(0.5, 0.8), 600); }
+          burst(p.ex, p.ey, "gravity", 1.2);
+        }, true);
+      }
+    }
+
+    // ---- one frame: the pointer glow, then every piece ----
+    var trail = [];
+    function drawPointer(now) {
+      if (!fine) return false;
+      var fade = 1 - (now - pointer.last) / 700;
+      if (fade <= 0) { trail.length = 0; return false; }
+      var hot = pointer.hot, R = hot ? 90 : 58;
+      var g = ctx.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, R);
+      g.addColorStop(0, "rgba(255,186,74," + ((hot ? 0.2 : 0.08) * fade) + ")");
+      g.addColorStop(1, "rgba(255,186,74,0)");
+      ctx.globalAlpha = 1; ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(pointer.x, pointer.y, R, 0, 6.283); ctx.fill();
+      ctx.fillStyle = hot ? "#FFD569" : "#FFBA4A";
+      for (var i = 0; i < trail.length; i++) {
+        var q = trail[i], age = (now - q.t) / 260;
+        if (age >= 1) continue;
+        ctx.globalAlpha = (1 - age) * (hot ? 0.38 : 0.2);
+        ctx.beginPath(); ctx.arc(q.x, q.y, (1 - age) * (hot ? 6 : 4) + 0.5, 0, 6.283); ctx.fill();
+      }
+      return true;
+    }
+    function draw(p, k, dt) {
+      var a, e, i;
+      if (p.k === "dot") {
+        p.vx *= 1 - p.drag * dt; p.vy *= 1 - p.drag * dt; p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+        a = 1 - k; ctx.fillStyle = p.c;
+        ctx.globalAlpha = a * 0.3; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 2.4, 0, 6.283); ctx.fill();
+        ctx.globalAlpha = a; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * (1 - k * 0.5), 0, 6.283); ctx.fill();
+      } else if (p.k === "ring") {
+        e = easeOut(k); ctx.strokeStyle = p.c; ctx.globalAlpha = 1 - k; ctx.lineWidth = Math.max(0.5, p.w * (1 - k));
+        ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(0.5, p.r0 + (p.r1 - p.r0) * e), 0, 6.283); ctx.stroke();
+      } else if (p.k === "ray") {
+        e = easeOut(k); var r1 = p.ri + (p.ro - p.ri) * e, r0 = p.ri + (p.ro - p.ri) * Math.max(0, e - 0.45);
+        ctx.strokeStyle = p.c; ctx.globalAlpha = 1 - k; ctx.lineWidth = Math.max(0.5, p.w * (1 - k)); ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(p.x + Math.cos(p.a) * r0, p.y + Math.sin(p.a) * r0); ctx.lineTo(p.x + Math.cos(p.a) * r1, p.y + Math.sin(p.a) * r1); ctx.stroke();
+      } else if (p.k === "shard") {
+        p.vy += p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.globalAlpha = 1 - k; ctx.fillStyle = p.c;
+        ctx.beginPath(); ctx.moveTo(0, -p.s); ctx.lineTo(p.s * 0.55, p.s * 0.6); ctx.lineTo(-p.s * 0.55, p.s * 0.6); ctx.closePath(); ctx.fill(); ctx.restore();
+      } else if (p.k === "spike") {
+        var grow = easeBack(Math.min(1, k / 0.3)), fade = k > 0.55 ? 1 - (k - 0.55) / 0.45 : 1, h = p.h * grow;
+        ctx.globalAlpha = 0.85 * fade; ctx.fillStyle = p.c;
+        ctx.beginPath(); ctx.moveTo(p.x - p.w / 2, p.y); ctx.lineTo(p.x + p.w / 2, p.y); ctx.lineTo(p.x, p.y - h); ctx.closePath(); ctx.fill();
+        ctx.globalAlpha = 0.7 * fade; ctx.fillStyle = "#FFFFFF";
+        ctx.beginPath(); ctx.moveTo(p.x - p.w * 0.12, p.y); ctx.lineTo(p.x + p.w * 0.12, p.y); ctx.lineTo(p.x, p.y - h * 0.92); ctx.closePath(); ctx.fill();
+      } else if (p.k === "beam") {
+        var prog = Math.min(1, k / 0.22), f = k < 0.22 ? 1 : 1 - (k - 0.22) / 0.78;
+        var x2 = p.x1 + (p.x2 - p.x1) * prog, y2 = p.y1 + (p.y2 - p.y1) * prog;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = p.c; ctx.globalAlpha = 0.35 * f; ctx.lineWidth = p.w * 1.8 * f + 0.5;
+        ctx.beginPath(); ctx.moveTo(p.x1, p.y1); ctx.lineTo(x2, y2); ctx.stroke();
+        ctx.strokeStyle = p.c2; ctx.globalAlpha = f; ctx.lineWidth = p.w * 0.45 * f + 0.5;
+        ctx.beginPath(); ctx.moveTo(p.x1, p.y1); ctx.lineTo(x2, y2); ctx.stroke();
+      } else if (p.k === "mover") {
+        e = p.ease ? k * k : easeOut(k);
+        p.x = p.sx + (p.ex - p.sx) * e; p.y = p.sy + (p.ey - p.sy) * e;
+        var c = PAL[p.el];
+        for (i = 0; i < 3; i++) dot(p.x + rnd(-p.r * 0.5, p.r * 0.5), p.y + rnd(-p.r * 0.5, p.r * 0.5), rnd(-40, 40), rnd(-40, 40), pick(c), rnd(2, p.r * 0.5), rnd(0.25, 0.45));
+        ctx.fillStyle = c[0]; ctx.globalAlpha = 0.45; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 1.8, 0, 6.283); ctx.fill();
+        ctx.fillStyle = c[2]; ctx.globalAlpha = 1; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 0.7, 0, 6.283); ctx.fill();
+      }
+    }
+    function frame(t) {
+      var dt = last ? Math.min((t - last) / 1000, 0.05) : 0.016;
+      last = t;
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "lighter";
+      var glowing = drawPointer(performance.now());
+      for (var i = parts.length - 1; i >= 0; i--) {
+        var p = parts[i];
+        p.life += dt;
+        if (p.life < 0) continue;
+        var k = p.life / p.max;
+        if (k >= 1) { var end = p.end; parts.splice(i, 1); if (end) end(p); continue; }
+        draw(p, k, dt);
+      }
+      ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
+      if (parts.length || glowing) requestAnimationFrame(frame);
+      else { running = false; ctx.clearRect(0, 0, W, H); }
+    }
+
+    // ---- clicks anywhere: a burst; on phones a small one ----
+    document.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      if (e.target.closest && e.target.closest(".hero-fruits .f")) return;
+      burst(e.clientX, e.clientY, ORDER[clicks++ % 4], e.pointerType === "mouse" ? 1 : 0.6);
+    }, { passive: true });
+
+    if (!fine) return; // everything below needs a mouse
+
+    var HOT = "a, button, .btn, .news-card, .fruit, .ship, .card, .stop, .panel, kbd, video";
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      var now = performance.now();
+      pointer.x = e.clientX; pointer.y = e.clientY; pointer.last = now; pointer.seen = true;
+      pointer.hot = !!(e.target.closest && e.target.closest(HOT));
+      trail.push({ x: e.clientX, y: e.clientY, t: now });
+      if (trail.length > 18) trail.shift();
+      wake();
+    }, { passive: true });
+
+    // cards lean toward the pointer, with a sheen that follows it
+    document.querySelectorAll(".news-card, .fruit, .ship, .card").forEach(function (el) {
+      el.classList.add("tilt");
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        el.style.transition = "transform .12s ease-out, border-color .2s, box-shadow .25s";
+        el.style.transform = "perspective(900px) rotateX(" + ((0.5 - y) * 8).toFixed(2) + "deg) rotateY(" + ((x - 0.5) * 10).toFixed(2) + "deg) translateY(-3px)";
+        el.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+        el.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+        el.classList.add("hot");
+      });
+      el.addEventListener("pointerleave", function () {
+        el.style.transition = ""; el.style.transform = ""; el.classList.remove("hot");
+      });
+    });
+
+    // buttons lean toward the pointer and ripple where they are clicked
+    document.querySelectorAll(".btn").forEach(function (b) {
+      b.addEventListener("pointermove", function (e) {
+        var r = b.getBoundingClientRect();
+        var dx = Math.max(-8, Math.min(8, (e.clientX - r.left - r.width / 2) * 0.22));
+        var dy = Math.max(-6, Math.min(6, (e.clientY - r.top - r.height / 2) * 0.3));
+        b.style.transform = "translate(" + dx.toFixed(1) + "px," + dy.toFixed(1) + "px)";
+      });
+      b.addEventListener("pointerleave", function () { b.style.transform = ""; });
+      b.addEventListener("pointerdown", function (e) {
+        var r = b.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2.2, rip = document.createElement("span");
+        rip.className = "rip"; rip.style.width = rip.style.height = s + "px";
+        rip.style.left = (e.clientX - r.left) + "px"; rip.style.top = (e.clientY - r.top) + "px";
+        b.appendChild(rip);
+        rip.addEventListener("animationend", function () { rip.remove(); });
+      });
+    });
+
+    // the key art and the floating fruits drift against the mouse; a fruit pops when clicked, then comes back
+    var hero = document.querySelector(".hero"), art = document.querySelector(".hero-art"), fruitsBox = document.querySelector(".hero-fruits");
+    if (hero && art && fruitsBox) {
+      hero.addEventListener("pointermove", function (e) {
+        var r = hero.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - 0.5, ny = (e.clientY - r.top) / r.height - 0.5;
+        art.style.transform = "translate3d(" + (-nx * 16).toFixed(1) + "px," + (-ny * 12).toFixed(1) + "px,0) scale(1.04)";
+        fruitsBox.style.transform = "translate3d(" + (nx * 30).toFixed(1) + "px," + (ny * 22).toFixed(1) + "px,0)";
+      });
+      hero.addEventListener("pointerleave", function () { art.style.transform = ""; fruitsBox.style.transform = ""; });
+      fruitsBox.querySelectorAll(".f").forEach(function (f) {
+        f.addEventListener("pointerdown", function () {
+          if (f.classList.contains("popped")) return;
+          var r = f.getBoundingClientRect(), el = ORDER.filter(function (n) { return f.classList.contains(n); })[0] || "flame";
+          elementBurst(r.left + r.width / 2, r.top + r.height / 2, el);
+          f.classList.add("popped");
+          setTimeout(function () { f.classList.remove("popped"); }, 1100);
+        });
+      });
+    }
+
+    // Z X C V fire a skill near the pointer and light their keys in the controls grid
+    var caps = {};
+    document.querySelectorAll(".keys kbd, .key-hint kbd").forEach(function (k) {
+      var n = k.textContent.trim().toLowerCase();
+      if (n === "z" || n === "x" || n === "c" || n === "v") (caps[n] = caps[n] || []).push(k);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+      var t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      var key = (e.key || "").toLowerCase();
+      if (!caps[key] && "zxcv".indexOf(key) < 0) return;
+      if (key.length !== 1 || "zxcv".indexOf(key) < 0) return;
+      skill(key);
+      (caps[key] || []).forEach(function (k) { k.classList.add("lit"); setTimeout(function () { k.classList.remove("lit"); }, 260); });
+    });
+  })();
+
+  // sections and cards slide up a little as they arrive (transform only, so nothing is ever hidden)
+  (function () {
+    if (!("IntersectionObserver" in window) || !window.matchMedia || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var list = document.querySelectorAll("main .head, .news-lead, .news-card, .log-day, .firststeps li, .howto-pic, .keys li, .guide .panel, .fruit, .stop, .row, .ship, .card, .shots figure, .built li, .road li, .split .panel");
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        el.classList.add("in"); io.unobserve(el);
+        setTimeout(function () { el.style.removeProperty("--d"); }, 1200); // (the stagger is only for arriving, not for hovers later)
+      });
+    }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
+    var vh = window.innerHeight;
+    list.forEach(function (el) {
+      if (el.getBoundingClientRect().top < vh) return; // already in view at load: leave it be
+      var i = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.setProperty("--d", (Math.min(i, 5) * 70) + "ms");
+      el.classList.add("rv");
+      io.observe(el);
+    });
   })();
 </script>
 
