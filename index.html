@@ -123,6 +123,72 @@ p { margin: 0; }
 @keyframes rise { from { transform: translateY(18px); } to { transform: none; } }
 .hero-copy .eyebrow, .hero-copy .tagline, .hero-copy .soon { text-shadow: 0 2px 10px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9); }
 
+/* hero extras: the newest fruits drifting over the key art, a "new" pill, a glowing wordmark, a slow light sweep */
+.hero-art .sweep { position: absolute; inset: 0; pointer-events: none; z-index: 1; mix-blend-mode: screen;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,213,105,.10) 46%, rgba(255,241,196,.18) 50%, rgba(255,213,105,.10) 54%, transparent 62%);
+  background-size: 260% 100%; background-position: 130% 0; animation: sweep 9s ease-in-out 1.2s infinite; }
+@keyframes sweep { 0% { background-position: 130% 0; } 55%, 100% { background-position: -30% 0; } }
+.hero-fruits { position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 3 / 2; max-width: 100%; z-index: 1; pointer-events: none; }
+.hero-fruits .f { position: absolute; width: clamp(46px, 11vw, 64px); height: auto; animation: bob 6s ease-in-out infinite; }
+.hero-fruits .f img { width: 100%; height: auto; display: block; }
+.hero-fruits .f.light   { right: 6%;  top: 10%; filter: drop-shadow(0 0 14px rgba(255,226,122,.75)); animation-duration: 5.6s; }
+.hero-fruits .f.gravity { right: 24%; top: 6%;  filter: drop-shadow(0 0 14px rgba(170,90,255,.8)); animation-duration: 6.8s; animation-delay: -2s; }
+.hero-fruits .f.ice     { right: 15%; top: 34%; filter: drop-shadow(0 0 14px rgba(143,216,255,.75)); animation-duration: 6.2s; animation-delay: -4s; }
+.hero-fruits .f.flame   { right: 35%; top: 30%; filter: drop-shadow(0 0 14px rgba(255,122,77,.8)); animation-duration: 7.2s; animation-delay: -1s; }
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-14px) rotate(6deg); } }
+.new-pill { justify-self: start; position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 10px; padding: 7px 16px 7px 7px; border-radius: 999px;
+  background: rgba(11,18,32,.78); border: 1px solid rgba(255,213,105,.55); color: var(--ink); text-decoration: none; font-size: .9rem; font-weight: 500;
+  box-shadow: 0 0 24px -6px rgba(255,186,74,.55); }
+.new-pill b { padding: 3px 10px; border-radius: 999px; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: var(--tar); font-size: .74rem; letter-spacing: .08em; }
+.new-pill::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,241,196,.28) 50%, transparent 70%);
+  transform: translateX(-120%); animation: shine 4.5s ease-in-out 1.6s infinite; }
+@keyframes shine { 0% { transform: translateX(-120%); } 40%, 100% { transform: translateX(120%); } }
+.new-pill:hover { border-color: var(--gold-hi); }
+.hero .mark span { filter: drop-shadow(0 0 18px rgba(240,102,46,.35)); animation: glow 4.5s ease-in-out infinite alternate; }
+@keyframes glow { from { filter: drop-shadow(0 0 14px rgba(240,102,46,.25)); } to { filter: drop-shadow(0 0 30px rgba(255,186,74,.55)); } }
+.stats li { align-items: center; padding: 8px 16px 8px 12px; background: rgba(11,18,32,.8); }
+.stats svg { width: 18px; height: 18px; flex: none; fill: none; stroke: var(--gold); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.stats b { font-size: 1.3rem; }
+@media (min-width: 900px) {
+  .hero-fruits { inset: 0; aspect-ratio: auto; }
+  .hero-fruits .f { width: clamp(70px, 6.5vw, 108px); }
+  .hero-fruits .f.light   { right: 7%;  top: 14%; }
+  .hero-fruits .f.gravity { right: 21%; top: 9%; }
+  .hero-fruits .f.ice     { right: 12%; top: 42%; }
+  .hero-fruits .f.flame   { right: 27%; top: 34%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-art .sweep, .new-pill::after { display: none; }
+  .hero-fruits .f, .hero .mark span { animation: none; }
+}
+
+/* ---------- how to play: first steps in order, the controls as keycaps, then what to work towards ---------- */
+.howto-top { display: grid; gap: 18px; align-items: start; }
+@media (min-width: 900px) { .howto-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 28px; } }
+.firststeps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: step; }
+.firststeps li { counter-increment: step; display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 12px; align-items: start; padding: 14px 16px; border-radius: 12px; background: var(--hull); border: 1px solid var(--rope); }
+.firststeps li::before { content: counter(step); width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--deck); border: 2px solid var(--gold); color: var(--gold-hi); font-family: "Lilita One", "Kanit", sans-serif; font-size: 1.15rem; }
+.firststeps b { display: block; color: var(--ink); }
+.firststeps span.d { color: var(--mist); font-size: .93rem; line-height: 1.5; }
+.howto-pic { display: grid; gap: 8px; margin: 0; }
+.howto-pic img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--rope); }
+.howto-pic figcaption { color: var(--mist); font-size: .85rem; }
+.keys { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 0; margin: 0; list-style: none; }
+@media (min-width: 560px) { .keys { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .keys { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.keys li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: center; padding: 12px 14px; border-radius: 12px; background: var(--hull); border: 1px solid var(--rope); color: var(--mist); font-size: .92rem; line-height: 1.45; }
+.keys li b { display: block; color: var(--ink); font-size: .95rem; }
+.kbd { display: flex; flex-wrap: wrap; gap: 4px; max-width: 152px; }
+kbd { display: inline-grid; place-items: center; min-width: 32px; height: 32px; padding: 0 8px; border-radius: 7px; background: linear-gradient(180deg, #24314F, #182540); border: 1px solid #33456B; border-bottom-width: 3px; color: var(--gold-hi); font: 700 .82rem var(--body); letter-spacing: .02em; white-space: nowrap; }
+.keys .tip { grid-column: 1 / -1; }
+.guide { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+@media (min-width: 900px) { .guide { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.guide .panel h3 { font-size: 1.35rem; color: var(--gold-hi); }
+.guide .panel ul { gap: 8px; }
+.guide .panel li { grid-template-columns: 10px minmax(0, 1fr); font-size: .93rem; line-height: 1.5; }
+.guide .panel li::before { content: ""; width: 6px; height: 6px; margin-top: .6em; border-radius: 50%; background: var(--gold); }
+.settings-row { margin-top: 14px; }
+
 /* ---------- trailer ---------- */
 .trailer { display: grid; gap: 28px; align-items: center; }
 .trailer video { width: 100%; aspect-ratio: 16 / 9; border-radius: var(--radius); border: 1px solid var(--rope); background: #000; box-shadow: 0 30px 80px -30px rgba(240,102,46,.45); }
@@ -333,6 +399,7 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
     <a class="mark" href="#top" aria-label="Fruit Piece, back to top"><span data-text="FRUIT">FRUIT</span><span data-text="PIECE">PIECE</span></a>
     <div class="links">
       <a class="partner" href="#updates"><span class="th">อัปเดตล่าสุด</span><span class="en">What's new</span></a>
+      <a href="#howto"><span class="th">วิธีเล่น</span><span class="en">How to play</span></a>
       <a href="#trailer"><span class="th">เทรลเลอร์</span><span class="en">Trailer</span></a>
       <a href="#fruits"><span class="th">ผลไม้วิเศษ</span><span class="en">Fruits</span></a>
       <a href="#islands"><span class="th">เกาะ</span><span class="en">Islands</span></a>
@@ -350,18 +417,26 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
 <header class="hero" id="top">
   <div class="hero-art">
     <img src="img/game-hero.jpg" alt="In-game screenshot: a war galleon and a pirate sloop in a night storm off the windmill village, lightning striking behind the masts." width="1920" height="1080" fetchpriority="high">
+    <div class="sweep" aria-hidden="true"></div>
   </div>
   <canvas class="embers" aria-hidden="true"></canvas>
+  <div class="hero-fruits" aria-hidden="true">
+    <span class="f light"><img src="fruits/icon-light.png" alt="" width="320" height="320"></span>
+    <span class="f gravity"><img src="fruits/icon-gravity.png" alt="" width="320" height="320"></span>
+    <span class="f ice"><img src="fruits/icon-ice.png" alt="" width="240" height="240"></span>
+    <span class="f flame"><img src="fruits/icon-flame.png" alt="" width="240" height="240"></span>
+  </div>
   <div class="wrap hero-copy">
+    <a class="new-pill rise" href="#updates"><b><span class="th">ใหม่</span><span class="en">NEW</span></b><span class="th">ผลแสง · ผลแรงโน้มถ่วง · เกาะลับ</span><span class="en">Light &amp; Gravity fruits · Secret island</span></a>
     <p class="eyebrow rise"><span class="th">เกมผจญภัยโจรสลัดสไตล์อนิเมะบน Roblox</span><span class="en">Anime pirate adventure on Roblox</span></p>
     <h1 class="mark rise" aria-label="Fruit Piece"><span data-text="FRUIT">FRUIT</span><span data-text="PIECE">PIECE</span></h1>
     <p class="tagline rise"><span class="th">กินผลไม้วิเศษ เลือกฝ่าย แล้วออกเรือไล่ล่าค่าหัวที่สูงที่สุดในทะเล</span><span class="en">Eat a magic fruit. Pick a side. Sail for the biggest bounty on the sea.</span></p>
     <ul class="stats rise" aria-label="The game at a glance">
-      <li><b>7</b> <span class="th">เกาะ</span><span class="en">islands</span></li>
-      <li><b>Lv 1–1000</b> <span class="th">ให้ไต่</span><span class="en">to climb</span></li>
-      <li><b>8</b> <span class="th">ผลไม้วิเศษ</span><span class="en">magic fruits</span></li>
-      <li><b>9</b> <span class="th">บอส</span><span class="en">bosses</span></li>
-      <li><b>4</b> <span class="th">เรือให้ขับ</span><span class="en">ships to sail</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19c2.5-1.6 5.5-1.6 9 0s6.5 1.6 9 0"/><path d="M6 16c1.5-5 7-7.5 12-4"/><path d="M12 12V7m0 0c-2-1-4 0-5 1m5-1c2-1 4 0 5 1"/></svg><b>7</b> <span class="th">เกาะ</span><span class="en">islands</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 13l6-6 6 6"/><path d="M6 19l6-6 6 6"/></svg><b>Lv 1–1000</b> <span class="th">ให้ไต่</span><span class="en">to climb</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="6.5"/><path d="M12 7.5c0-2.5 1.5-4 4-4.5"/><path d="M12 7.5c-1.5-1.8-3.5-2.3-5-1.6"/></svg><b>8</b> <span class="th">ผลไม้วิเศษ</span><span class="en">magic fruits</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18h16l-1.5-10-4.5 4-2-6-2 6-4.5-4z"/></svg><b>9</b> <span class="th">บอส</span><span class="en">bosses</span></li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16h18l-3 4H6z"/><path d="M12 3v13"/><path d="M12 4l6 9h-6"/></svg><b>4</b> <span class="th">เรือให้ขับ</span><span class="en">ships to sail</span></li>
     </ul>
     <div class="actions rise">
       <a class="btn btn-gold" href="#updates"><span class="th">ดูอัปเดตล่าสุด</span><span class="en">See what's new</span></a>
@@ -512,6 +587,91 @@ footer p { color: var(--mist); font-size: .9rem; max-width: 70ch; }
         </article>
       </div>
       <p class="note"><span class="th">ทุกอย่างในหน้านี้อยู่ในเวอร์ชันทดสอบ ตัวเลขอาจปรับก่อนเปิดเกมจริง</span><span class="en">Everything on this page is in the test build, and numbers may change before launch.</span></p>
+    </div>
+  </section>
+
+  <section class="band" id="howto">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow"><span class="th">คู่มือการเล่น</span><span class="en">How to play</span></p>
+        <h2><span class="th">ออกเรือครั้งแรก</span><span class="en">Your first voyage</span></h2>
+        <p class="lede"><span class="th">เริ่มจากศูนย์จนออกทะเลได้ในไม่กี่นาที ทุกอย่างในคู่มือนี้ตรงกับเกมเวอร์ชันทดสอบตอนนี้</span><span class="en">From a fresh start to open sea in a few minutes. Everything in this guide matches the current test build.</span></p>
+      </div>
+
+      <div class="howto-top">
+        <ol class="firststeps" aria-label="First steps">
+          <li><div><b><span class="th">เลือกฝ่าย</span><span class="en">Pick a side</span></b><span class="d"><span class="th">โจรสลัดเก็บค่าหัว (Bounty) ส่วนทหารเรือเก็บเกียรติยศ (Honor)</span><span class="en">Pirates earn Bounty. Marines earn Honor.</span></span></div></li>
+          <li><div><b><span class="th">เริ่มที่หมู่บ้านกังหันลม</span><span class="en">Start in Windmill Village</span></b><span class="d"><span class="th">ทั้งเกาะเป็นเขตปลอดภัย ฝึกมือได้สบายๆ</span><span class="en">The whole island is a safe zone, so you can learn in peace.</span></span></div></li>
+          <li><div><b><span class="th">รับเควส</span><span class="en">Take a quest</span></b><span class="d"><span class="th">กด E ค้างที่ NPC ที่มี ! บนหัว ส่วน NPC ที่มี $ คือคนขายของ</span><span class="en">Hold E at an NPC with ! over its head. NPCs with $ sell things.</span></span></div></li>
+          <li><div><b><span class="th">ลงแต้มสเตตัส</span><span class="en">Spend your stat points</span></b><span class="d"><span class="th">ทุกเลเวลได้แต้มลง Melee, Defense, Sword และ Fruit ในหน้า Stats</span><span class="en">Every level gives points for Melee, Defense, Sword and Fruit in the Stats window.</span></span></div></li>
+          <li><div><b><span class="th">ซื้อดาบเล่มแรก</span><span class="en">Get your first sword</span></b><span class="d"><span class="th">Shopkeeper ขาย Katana $2,000 และ Spawn Keeper ตั้งจุดเกิดใหม่ให้คุณ</span><span class="en">The Shopkeeper sells the Katana for $2,000, and the Spawn Keeper sets where you respawn.</span></span></div></li>
+          <li><div><b><span class="th">ออกเรือ</span><span class="en">Set sail</span></b><span class="d"><span class="th">Boat Dealer มี Raft ฟรี, Fishing Boat $1,500, Pirate Sloop $8,000 และ War Galleon $50,000 เรือจะรออยู่ที่ท่าเรือ</span><span class="en">The Boat Dealer has a free Raft, the Fishing Boat for $1,500, the Pirate Sloop for $8,000 and the War Galleon for $50,000. Your boat waits at the dock.</span></span></div></li>
+        </ol>
+        <figure class="howto-pic">
+          <img src="img/game-hud.jpg" alt="In-game screenshot: the interface with a compass along the top, level, health and energy bars, the hotbar and the skills of the fruit in hand." width="1600" height="900" loading="lazy">
+          <figcaption><span class="th">หน้าจอในเกม: เข็มทิศด้านบน เลเวล เลือด พลังงาน hotbar และสกิลของสิ่งที่ถืออยู่</span><span class="en">The interface: a compass along the top, level, health and energy, the hotbar and the skills of what you hold.</span></figcaption>
+        </figure>
+      </div>
+
+      <h3 class="sub"><span class="th">ปุ่มควบคุมบน PC</span><span class="en">Controls on PC</span></h3>
+      <ul class="keys">
+        <li><span class="kbd"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span><b><span class="th">เดิน</span><span class="en">Move</span></b></span></li>
+        <li><span class="kbd"><kbd>Space</kbd></span><span><b><span class="th">กระโดด</span><span class="en">Jump</span></b><span class="th">กดอีกครั้งกลางอากาศ = กระโดดสองชั้น หรือ Geppo 2 ครั้งเมื่อซื้อแล้ว</span><span class="en">Again in the air for a double jump, or 2 Geppo jumps once you buy it.</span></span></li>
+        <li><span class="kbd"><kbd>Ctrl</kbd></span><span><b><span class="th">เปิด / ปิดการวิ่ง</span><span class="en">Run on or off</span></b><span class="th">ปุ่ม Ctrl ซ้าย</span><span class="en">Left Ctrl</span></span></li>
+        <li><span class="kbd"><kbd>Q</kbd></span><span><b>Dash</b><span class="th">พุ่งตัวหลบหรือเข้าหาศัตรู</span><span class="en">Burst away or close in.</span></span></li>
+        <li><span class="kbd"><kbd>R</kbd></span><span><b>Soru</b><span class="th">พุ่งแวบ ใช้ได้เมื่อซื้อแล้ว</span><span class="en">A flash step, once you buy it.</span></span></li>
+        <li><span class="kbd"><kbd><span class="th">คลิก</span><span class="en">Click</span></kbd></span><span><b><span class="th">คอมโบ M1</span><span class="en">M1 combo</span></b><span class="th">ตีต่อกันได้ 5 จังหวะ จังหวะที่ 5 แรงที่สุด</span><span class="en">5 hits in a row, the 5th is a finisher.</span></span></li>
+        <li><span class="kbd"><kbd>Z</kbd><kbd>X</kbd><kbd>C</kbd><kbd>V</kbd></span><span><b><span class="th">สกิล</span><span class="en">Skills</span></b><span class="th">ของอาวุธหรือผลไม้ที่ถืออยู่</span><span class="en">Of the weapon or fruit in your hand.</span></span></li>
+        <li><span class="kbd"><kbd>J</kbd></span><span><b>Armor Haki</b><span class="th">เปิด / ปิด หลังจากเรียนแล้ว</span><span class="en">On or off, once you learn it.</span></span></li>
+        <li><span class="kbd"><kbd>1</kbd><kbd>–</kbd><kbd>9</kbd></span><span><b>Hotbar</b><span class="th">เลือกช่องที่จะถือ</span><span class="en">Pick what to hold.</span></span></li>
+        <li><span class="kbd"><kbd>E</kbd></span><span><b><span class="th">กดค้าง</span><span class="en">Hold</span></b><span class="th">คุยกับ NPC และเปิดหีบ</span><span class="en">Talk to NPCs and open chests.</span></span></li>
+        <li><span class="kbd"><kbd><span class="th">คลิก</span><span class="en">Click</span></kbd></span><span><b><span class="th">ตอนถือผลไม้</span><span class="en">Holding a fruit</span></b><span class="th">กินผล มีกล่องถาม Yes / No ก่อน</span><span class="en">Eat it. A Yes / No box asks first.</span></span></li>
+        <li><span class="kbd"><kbd>Backspace</kbd></span><span><b><span class="th">ทิ้งผลไม้</span><span class="en">Drop a fruit</span></b><span class="th">ผลที่ถืออยู่ในมือ</span><span class="en">The one in your hand.</span></span></li>
+        <li class="tip"><span class="kbd"><kbd>i</kbd></span><span><span class="th">บางสกิลกดค้างเพื่อเล็งแล้วปล่อยเพื่อยิง ส่วน Light V กับ Gravity C ทำงานต่อเนื่องตราบที่กดค้าง (Gravity C ได้นานสุด 3 วินาที) บนมือถือมีปุ่มบนจอให้กดแทน</span><span class="en">Some skills are held to aim and fire when you let go. Light V and Gravity C keep going while held, Gravity C for up to 3 seconds. Phones get on-screen buttons instead.</span></span></li>
+      </ul>
+
+      <h3 class="sub"><span class="th">เล่นให้เก่งขึ้น</span><span class="en">What to work towards</span></h3>
+      <div class="guide">
+        <article class="panel">
+          <h3><span class="th">แข็งแกร่งขึ้น</span><span class="en">Getting stronger</span></h3>
+          <ul>
+            <li><span><span class="th">เลเวลขึ้นได้แต้มสเตตัส ของสวมใส่และยศบวกแต้มให้เพิ่ม</span><span class="en">Levels give stat points. Gear and rank add bonus points.</span></span></li>
+            <li><span><span class="th">ใช้อาวุธหรือผลไม้บ่อยๆ Mastery จะขึ้นและปลดล็อกสกิล เช่นผลแสงกับผลแรงโน้มถ่วงเปิด Z ที่ 1, X ที่ 50, C ที่ 200 และ V ที่ 500 ส่วนดาบ Saber เปิดที่ 100 / 200 / 300</span><span class="en">Use a weapon or fruit to raise its Mastery and unlock skills. Light and Gravity open Z at 1, X at 50, C at 200 and V at 500; the Saber at 100, 200 and 300.</span></span></li>
+            <li><span><span class="th">Ability Teacher สอน Geppo $50,000 และ Soru $100,000</span><span class="en">The Ability Teacher sells Geppo for $50,000 and Soru for $100,000.</span></span></li>
+            <li><span><span class="th">Armor Haki มี 5 ระดับ</span><span class="en">Armor Haki has 5 levels.</span></span></li>
+            <li><span><span class="th">ค่าหัวและเกียรติยศพาไปสู่ยศ 8 ขั้น ทุกขั้นให้แต้มสเตตัสฟรี</span><span class="en">Bounty and Honor lead to 8 ranks, each with free stat points.</span></span></li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3><span class="th">ผลไม้</span><span class="en">Fruits</span></h3>
+          <ul>
+            <li><span><span class="th">มีพลังผลไม้ได้ทีละหนึ่งผล</span><span class="en">You have one fruit power at a time.</span></span></li>
+            <li><span><span class="th">ไม่มีใครขายผลไม้ ต้องหาเองบนแผนที่ จากเรือ Sea Hunter หรือในหีบของเกาะลับ</span><span class="en">Nobody sells fruits. Find them on the map, from Sea Hunters or in secret island chests.</span></span></li>
+            <li><span><span class="th">ถือผลแล้วคลิกเพื่อกิน เกมจะถามก่อนทุกครั้ง</span><span class="en">Hold one and click to eat it. The game always asks first.</span></span></li>
+            <li><span><span class="th">ผลที่ยังไม่กินให้เก็บใน Bag เพราะผลบน hotbar จะหายเมื่อตายหรือออกเกม</span><span class="en">Keep spare fruits in the Bag: fruits on the hotbar are lost when you die or leave.</span></span></li>
+          </ul>
+        </article>
+        <article class="panel">
+          <h3><span class="th">อีเวนต์และศัตรู</span><span class="en">Events and enemies</span></h3>
+          <ul>
+            <li><span><span class="th">Elite โผล่ตามเกาะต่างๆ และจะสู้เฉพาะคนที่ตีมันก่อน</span><span class="en">Elites appear on the islands and only fight players who hit them first.</span></span></li>
+            <li><span><span class="th">บอสประจำเกาะแชร์รางวัล ใครตีถึง 10% ของเลือดได้รางวัลเต็ม</span><span class="en">Island bosses share their rewards: deal 10% of their health for the full reward.</span></span></li>
+            <li><span><span class="th">ปลุก Saber Boss ที่ผู้เรียกบอสบนเกาะ Saber หรือใช้ Storm Bell</span><span class="en">Wake the Saber Boss at the Boss Summoner on Saber Island, or with a Storm Bell.</span></span></li>
+            <li><span><span class="th">ทุก 2–3 ชั่วโมงเกาะเข็มทิศจะโผล่ขึ้นมา และพาไปสู่เกาะลับ</span><span class="en">Every 2–3 hours the compass island rises and leads the way to the secret island.</span></span></li>
+            <li><span><span class="th">ค่าหัวหรือเกียรติยศสูงจะมีนักล่าค่าหัวตามมา ส่วน Sea Hunter กลางทะเลไม่ยุ่งกับคุณจนกว่าจะโดนตีก่อน</span><span class="en">A high Bounty or Honor brings bounty hunters. Sea Hunters at sea leave you alone until you hit them.</span></span></li>
+            <li><span><span class="th">PvP นับคนเดิมได้แค่ 3 ครั้งต่อวัน</span><span class="en">PvP counts the same player only 3 times a day.</span></span></li>
+          </ul>
+        </article>
+      </div>
+      <ul class="facts settings-row" aria-label="Settings">
+        <li><b><span class="th">ตั้งค่าได้</span><span class="en">In Settings</span></b></li>
+        <li><span class="th">เสียงเพลงและเสียงเอฟเฟกต์แยกกัน</span><span class="en">Music and SFX volume</span></li>
+        <li><span class="th">จอสั่น</span><span class="en">Camera shake</span></li>
+        <li><span class="th">ตัวเลขดาเมจ</span><span class="en">Damage numbers</span></li>
+        <li><span class="th">กราฟิกต่ำ</span><span class="en">Low graphics</span></li>
+        <li>VFX LOW / MID / HIGH</li>
+        <li><span class="th">ป้ายชื่อผู้เล่น</span><span class="en">Name tags</span></li>
+      </ul>
     </div>
   </section>
 
